@@ -4,8 +4,7 @@ import { NextFunction, Request, Response } from "express";
 export const errorHandler = (
   err: ErrorWithStatus,
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
 ): void => {
   const statusCode = err.status || 500;
   const message = err.message || "Internal Server Error";
