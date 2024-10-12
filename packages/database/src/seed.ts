@@ -1,23 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PrismaClient } from "@prisma/client";
-import fs from "node:fs";
-import path from "path";
 import { rgbToHex } from "../utils";
+import { templates } from "../templates/templates"; // Import the templates array
 
 const prisma = new PrismaClient();
-
-// Read and parse all JSON templates in a folder
-const loadFigmaTemplates = (folderPath: string): any[] => {
-  const jsonFiles = fs
-    .readdirSync(folderPath)
-    .filter((file) => path.extname(file) === ".json");
-
-  return jsonFiles.map((file) => {
-    const filePath = path.join(folderPath, file);
-    const fileData = fs.readFileSync(filePath, "utf-8");
-    return JSON.parse(fileData);
-  });
-};
 
 // Extract text data from the Figma frame
 const extractTextData = (frame: any): any[] => {
@@ -88,7 +73,7 @@ const createTemplate = async (
         name: frameData.name,
         width: frameData.width,
         height: frameData.height,
-        img: "https://lomo-bucket.s3.eu-north-1.amazonaws.com/Frame+5.jpg",
+        img: "https://lomo-bucket.s3.eu-north-1.amazonaws.com/Frame+5.jpg", // You might want to update this
         backgroundColor: frameData.backgroundColor,
         categoryId: categoryId,
         assets: {
@@ -106,16 +91,12 @@ const createTemplate = async (
 const seedDatabase = async () => {
   try {
     const categories = ["Simple", "Catchy", "Vox"];
-    const templatesFolderPath = "../templates";
 
     // Seed categories
     await seedCategories(categories);
 
-    // Load all Figma templates from the folder
-    const figmaTemplates = loadFigmaTemplates(templatesFolderPath);
-
     // Process and save each template
-    for (const figmaData of figmaTemplates) {
+    for (const figmaData of templates) {
       const frameData = {
         name: figmaData.name,
         width: figmaData.width,
