@@ -1,8 +1,113 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
-  :root {
-    --radius: 0.5rem
+  /* Typography */
+  h1 {
+    @apply text-5xl font-bold mb-4;
+  }
+  h2 {
+    @apply text-4xl font-semibold mb-3;
+  }
+  h3 {
+    @apply text-3xl font-medium mb-2;
+  }
+  h4 {
+    @apply text-2xl font-medium mb-2;
+  }
+  h5 {
+    @apply text-xl font-medium mb-2;
+  }
+  h6 {
+    @apply text-lg font-medium mb-2;
+  }
+  p {
+    @apply text-base mb-4;
+  }
+
+  /* Links */
+  a {
+    @apply text-blue-600 hover:text-blue-800 underline;
+  }
+
+  /* Lists */
+  ul,
+  ol {
+    @apply pl-5 mb-4;
+  }
+  li {
+    @apply mb-1;
+  }
+}
+
+@layer utilities {
+  /* Muted colors */
+  .text-muted {
+    @apply text-gray-600;
+  }
+  .text-primary {
+    @apply text-slate-900;
+  }
+  .bg-muted {
+    @apply bg-gray-100;
+  }
+
+  /* Accent colors */
+  .text-accent {
+    @apply text-blue-600;
+  }
+  .bg-accent {
+    @apply bg-blue-100;
+  }
+
+  /* Success colors */
+  .text-success {
+    @apply text-green-600;
+  }
+  .bg-success {
+    @apply bg-green-100;
+  }
+
+  /* Warning colors */
+  .text-warning {
+    @apply text-yellow-600;
+  }
+  .bg-warning {
+    @apply bg-yellow-100;
+  }
+
+  /* Error colors */
+  .text-error {
+    @apply text-red-600;
+  }
+  .bg-error {
+    @apply bg-red-100;
+  }
+
+  /* Responsive text sizes */
+  .text-responsive {
+    @apply text-base sm:text-lg md:text-xl;
+  }
+
+  /* Common layout utilities */
+  .container-narrow {
+    @apply max-w-3xl mx-auto px-4;
+  }
+  .container-wide {
+    @apply max-w-6xl mx-auto px-4;
+  }
+
+  /* Flexbox utilities */
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+
+  /* Card-like element */
+  .card {
+    @apply bg-white shadow-md rounded-lg p-6;
   }
 }
