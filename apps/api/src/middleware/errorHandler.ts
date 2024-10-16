@@ -1,10 +1,11 @@
 import { ErrorWithStatus } from "../types/index";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 export const errorHandler = (
   err: ErrorWithStatus,
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): void => {
   const statusCode = err.status || 500;
   const message = err.message || "Internal Server Error";
