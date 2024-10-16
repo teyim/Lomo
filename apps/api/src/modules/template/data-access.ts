@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import { Template } from '@prisma/client'; // Assuming 'Template' is a model in your Prisma schema
+import { PrismaClient } from "@prisma/client";
+import { Template } from "@prisma/client"; // Assuming 'Template' is a model in your Prisma schema
 
 const prisma = new PrismaClient();
 
@@ -7,11 +7,13 @@ const prisma = new PrismaClient();
 export const fetchTemplates = async (): Promise<Template[] | []> => {
   try {
     // Fetch all templates from the database
-    const templates = await prisma.template.findMany();
+    const templates = await prisma.template.findMany({
+      include: { category: true },
+    });
     return templates;
   } catch (error) {
-    console.error('Error fetching templates from database:', error);
-    throw new Error('Error fetching templates from the database');
+    console.error("Error fetching templates from database:", error);
+    throw new Error("Error fetching templates from the database");
   }
 };
 
@@ -27,7 +29,7 @@ export const fetchTemplateById = async (
     });
     return template;
   } catch (error) {
-    console.error('Error fetching template from database:', error);
-    throw new Error('Error fetching template from the database');
+    console.error("Error fetching template from database:", error);
+    throw new Error("Error fetching template from the database");
   }
 };
