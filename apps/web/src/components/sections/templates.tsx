@@ -6,11 +6,11 @@ import Dropdown from "@/components/ui/dropdown";
 import { thumbnailCategories } from "@/constants";
 import { Template } from "@prisma/client";
 
-type ThumbnailsSectionProps = {
-  thumbnials: Template[];
+type TemplatesSectionProps = {
+  templates: Template[];
 };
 
-function ThumbnailsSection({ thumbnials }: ThumbnailsSectionProps) {
+function TemplatesSection({ templates }: TemplatesSectionProps) {
   const handleSelect = (value: string) => {
     console.log("Selected:", value);
   };
@@ -25,11 +25,12 @@ function ThumbnailsSection({ thumbnials }: ThumbnailsSectionProps) {
           className="w-[150px] bg-gray-100 hover:bg-gray-200" // Custom styles
         />
         <div className="mt-10 grid lg:grid-cols-4 grid-cols-1 gap-4">
-          {thumbnials.map((thumbnail, index) => (
+          {templates.map((templates, index) => (
             <Card
-              key={thumbnail.id}
-              title={thumbnail.name}
-              imageUrl={thumbnail.img}
+              key={templates.id}
+              title={templates.name}
+              id={templates.id}
+              imageUrl={templates.img}
             />
           ))}
         </div>
@@ -38,4 +39,4 @@ function ThumbnailsSection({ thumbnials }: ThumbnailsSectionProps) {
   );
 }
 
-export default ThumbnailsSection;
+export default TemplatesSection;

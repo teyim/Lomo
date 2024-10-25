@@ -1,12 +1,28 @@
+"use client";
+
+import { useDynamicNavigation } from "@/hooks";
 import Image from "next/image";
 import React from "react";
+import { Button } from "./button";
+import { DynamicRoutes } from "@/types";
+import { PenToolIcon } from "lucide-react";
 type CardProps = {
   title: string;
   imageUrl: string;
+  id: string;
 };
-function Card({ title, imageUrl }: CardProps) {
+function Card({ title, imageUrl, id }: CardProps) {
+  const { navigateToRoute } = useDynamicNavigation();
+
+  const handleClick = () => {
+    navigateToRoute({
+      slug: `${id}`,
+      dynamicRouteName: DynamicRoutes.Template,
+    });
+  };
+
   return (
-    <div className="rounded-xl p-3 bg-white ring-1 ring-slate-500 hover:ring-blue-700 hover:ring-2 hover:cursor-pointer hover:shadow-md hover:shadown-blue-400">
+    <div className="rounded-xl p-3 bg-white ring-1 ring-slate-500 ">
       <div>
         <Image
           src={imageUrl}
@@ -17,7 +33,18 @@ function Card({ title, imageUrl }: CardProps) {
         />
       </div>
       <div>
-        <h6 className="mt-3 font-geist_mono font-bold">{title}</h6>
+        <p className="mt-3 font-geist_mono font-bold">{title}</p>
+      </div>
+      <div>
+        <Button
+          onClick={handleClick}
+          className="rounded-xl flex space-x-2 items-center"
+        >
+          <span>Edit</span>
+          <span>
+            <PenToolIcon size={15} />
+          </span>
+        </Button>
       </div>
     </div>
   );

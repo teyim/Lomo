@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import ThumbnailsSection from "@/components/sections/thumbnails";
+import TemplatesSection from "@/components/sections/templates";
 import { getBlogPostTemplates } from "@/services";
 import React from "react";
 
@@ -9,7 +9,7 @@ async function page() {
     <section>
       <Header />
       <div className="bg-[#F5F7FA]">
-        <ThumbnailsSection thumbnials={data} />
+        <TemplatesSection templates={data} />
       </div>
     </section>
   );
