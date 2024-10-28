@@ -1,4 +1,5 @@
 import './global.css';
+import '@shadcn-test/styles/global.css';
 
 export const metadata = {
   title: 'Welcome to lomo-frontend',

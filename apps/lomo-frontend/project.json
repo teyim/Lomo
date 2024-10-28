@@ -5,5 +5,8 @@
   "projectType": "application",
   "tags": [],
   "// targets": "to see all targets run: nx show project lomo-frontend --web",
-  "targets": {}
+  "targets": {},
+  "options": {
+    "postcssConfig": "apps/lomo-frontend/postcss.config.js"
+  }
 }
