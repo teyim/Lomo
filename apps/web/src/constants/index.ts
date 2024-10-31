@@ -6,3 +6,5 @@ export const thumbnailCategories = [
   { label: "Catchy", value: "catchy" },
   { label: "Vox", value: "vox" },
 ];
+
+export const canvasScaleFactor = 0.7;

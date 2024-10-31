@@ -3,6 +3,8 @@ import React from "react";
 import { Template } from "@prisma/client";
 import { getBlogPostById } from "@/services";
 import TemplateEditor from "@/components/TemplateEditor";
+import LayerPanel from "@/components/panels/LayerPanel";
+import SettingsPanel from "@/components/panels/SettingsPanel";
 
 type TemplatePageProps = {
   params: { id: string };
@@ -25,17 +27,10 @@ export async function generateStaticParams() {
 async function Page({ params }: TemplatePageProps) {
   const templateData = await getBlogPostById(params.id);
 
-  console.log(templateData);
   return (
-    <div className=" p-4">
-      <div>
-        <p>
-          <span className="font-bold">Template</span>: {templateData.name}
-        </p>
-
-        <div className="h-[80vh] flex w-screen justify-center items-center content-center">
-          <TemplateEditor templateData={templateData} />
-        </div>
+    <div className="relative min-h-screen w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] p-4">
+      <div className="relative z-0">
+        <TemplateEditor templateData={templateData} />
       </div>
     </div>
   );

@@ -42,3 +42,10 @@ export interface Template {
   categoryId: string;
   assets: TemplateAsset[];
 }
+
+export type CanvasOptions = {
+  originalWidth: number;
+  originalHeight: number;
+  scaleFactor: number;
+  backgroundColor: string;
+};
