@@ -4,10 +4,7 @@ import { Template } from "@/types";
 // get all blogpost templates
 export const getBlogPostTemplates = async () => {
   const response = await fetch(`${baseUrl}/api/templates/`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    cache: "no-cache",
   });
 
   if (!response.ok) {
@@ -21,10 +18,7 @@ export const getBlogPostTemplates = async () => {
 // get single blogpost by id
 export const getBlogPostById = async (id: string) => {
   const response = await fetch(`${baseUrl}/api/templates/${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    cache: "no-cache",
   });
 
   if (!response.ok) {

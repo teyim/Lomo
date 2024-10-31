@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
 import { Template } from "@/types";
+import { getFontWeight } from "@/lib/utils";
 
 type TemplateEditorProps = {
   templateData: Template;
@@ -14,22 +15,30 @@ const TemplateEditor = ({ templateData }: TemplateEditorProps) => {
     if (canvasRef.current) {
       const initCanvas = new fabric.Canvas(canvasRef.current, {
         backgroundColor: `${templateData.backgroundColor}`,
-        width: 800,
-        height: 500,
+        width: templateData.width,
+        height: templateData.height,
         preserveObjectStacking: true,
         renderOnAddRemove: false,
       });
 
-      const text = new fabric.Textbox(`${templateData.assets[0].defaultText}`, {
-        left: 400,
-        top: 60,
-        fontSize: 40,
-        fontWeight: 300,
-        fontFamily: "Lexend",
-        fill: "white",
+      const textArray = templateData.assets.map((asset) => {
+        return new fabric.Textbox(`${asset.defaultText}`, {
+          left: asset.positionX,
+          top: asset.positionY,
+          fontSize: asset.fontSize,
+          width: asset.width,
+          height: asset.height,
+          fontWeight: getFontWeight(asset.fontWeight),
+          fontFamily: asset.fontFamily,
+          fill: asset.color,
+          textAlign: "center",
+        });
       });
 
-      initCanvas.add(text);
+      textArray.map(function (text) {
+        initCanvas.add(text);
+      });
+
       initCanvas.renderAll();
 
       return () => {
@@ -39,7 +48,7 @@ const TemplateEditor = ({ templateData }: TemplateEditorProps) => {
   }, []);
 
   return (
-    <div className=" w-full h-full flex justify-center items-center">
+    <div className="w-full h-full flex justify-center items-center">
       <canvas id="canvas" ref={canvasRef} />
     </div>
   );

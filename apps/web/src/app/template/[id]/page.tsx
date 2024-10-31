@@ -27,13 +27,13 @@ async function Page({ params }: TemplatePageProps) {
 
   console.log(templateData);
   return (
-    <div className="container p-4">
+    <div className=" p-4">
       <div>
         <p>
           <span className="font-bold">Template</span>: {templateData.name}
         </p>
 
-        <div className="">
+        <div className="h-[80vh] flex w-screen justify-center items-center content-center">
           <TemplateEditor templateData={templateData} />
         </div>
       </div>
