@@ -110,12 +110,12 @@ export default function SettingsPanel({
             <Input
               type="color"
               value={selectedElement.fill}
-              onChange={(e) => onUpdate({ color: e.target.value })}
+              onChange={(e) => onUpdate({ fill: e.target.value })}
               className="w-6 h-6 p-0.5 bg-slate-700 border-slate-600"
             />
             <Input
               value={selectedElement.fill}
-              onChange={(e) => onUpdate({ color: e.target.value })}
+              onChange={(e) => onUpdate({ fill: e.target.value })}
               className="h-6 w-20 bg-slate-700 border-slate-600 text-xs"
               placeholder="#000000"
             />
