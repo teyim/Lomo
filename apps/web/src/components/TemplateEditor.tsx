@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
-import { Template } from "@/types";
+import { Template, TemplateAsset } from "@/types";
 import { getFontWeight } from "@/lib/utils";
 import { useFabricCanvas } from "@/hooks";
 import { canvasScaleFactor } from "@/constants";
@@ -37,6 +37,7 @@ const styles = {
 } as const;
 
 export default function TemplateEditor({ templateData }: TemplateEditorProps) {
+  console.log(templateData);
   const [selectedElement, setSelectedElement] = useState<fabric.Text | null>(
     null
   );
@@ -101,6 +102,7 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
     }
 
     setSelectedElement(object);
+
     setSelectedElementUpdates({
       text: object.text || "",
       fontFamily: object.fontFamily || "",
@@ -111,7 +113,7 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
       height: object.height || 0,
       left: object.left || 0,
       top: object.top || 0,
-      fontWeight: object.fontWeight || 100,
+      fontWeight: object.fontWeight as number,
     });
   };
 
@@ -138,7 +140,7 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
 
       <div className={styles.mainContent}>
         <div className={styles.sidePanel}>
-          <LayerPanel assets={templateData?.assets} />
+          <LayerPanel assets={canvasRef.current?.getObjects()} />
         </div>
 
         <div className={styles.canvasWrapper}>
