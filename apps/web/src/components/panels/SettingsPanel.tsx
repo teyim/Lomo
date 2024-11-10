@@ -35,7 +35,7 @@ export default function SettingsPanel({
 }: SettingsPanelProps) {
   if (selectedElement?.width === 0 || selectedElement?.height === 0) {
     return (
-      <div className="absolute right-2 top-[35%] w-[230px] h-[250px] bg-slate-800 backdrop-blur-sm rounded-xl shadow-lg text-white ring-1 ring-white">
+      <div className=" z-50 absolute right-2  md:bottom-2 lg:top-[35%] w-[230px] h-[250px] bg-slate-800 backdrop-blur-sm rounded-xl shadow-lg text-white ring-1 ring-white">
         <h6 className="p-3 font-mono text-sm font-bold">Settings</h6>
         <Separator className="bg-white/35" />
         <div className="flex items-center justify-center h-[210px]">
@@ -48,7 +48,7 @@ export default function SettingsPanel({
   }
 
   return (
-    <div className="absolute right-2 top-[35%] w-[230px] h-[250px] bg-slate-800 backdrop-blur-sm rounded-xl shadow-lg text-white ring-1 ring-white">
+    <div className="absolute right-2  md:bottom-2 lg:top-[35%] w-[230px] h-[250px] bg-slate-800 backdrop-blur-sm rounded-xl shadow-lg text-white ring-1 ring-white">
       <h6 className="p-3 font-mono text-sm font-bold">Settings</h6>
       <Separator className="bg-white/35" />
       <div className="space-y-2 p-2 h-[210px] overflow-y-auto">

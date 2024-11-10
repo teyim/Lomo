@@ -35,9 +35,8 @@ const styles = {
     "w-full h-full flex items-center justify-between overflow-hidden",
   sidePanel: "h-full overflow-y-auto",
   canvasWrapper: "flex-1 h-full flex justify-center items-center",
-  mobileMessage:
-    "hidden md:hidden w-full h-screen bg-slate-800 text-white flex items-center justify-center text-center px-4",
-  desktopContent: "hidden md:block w-full h-full",
+
+  desktopContent: " w-full h-full",
 } as const;
 
 export default function TemplateEditor({ templateData }: TemplateEditorProps) {
@@ -167,13 +166,6 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
 
   return (
     <>
-      {/* Mobile Message */}
-      <div className={styles.mobileMessage}>
-        <h2 className="text-2xl font-semibold">
-          Not available on mobile devices
-        </h2>
-      </div>
-
       {/* Desktop Content */}
       <div className={styles.desktopContent}>
         <div className={styles.container}>
