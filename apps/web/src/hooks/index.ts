@@ -22,8 +22,6 @@ export const useFabricCanvas = ({
   backgroundColor,
 }: CanvasOptions) => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
-  const scaledWidth = originalWidth * scaleFactor;
-  const scaledHeight = originalHeight * scaleFactor;
 
   // Initialize canvas
   useEffect(() => {
@@ -31,8 +29,8 @@ export const useFabricCanvas = ({
 
     const canvas = new fabric.Canvas("canvas", {
       backgroundColor: backgroundColor,
-      width: scaledWidth,
-      height: scaledHeight,
+      width: originalWidth,
+      height: originalHeight,
       preserveObjectStacking: true,
       renderOnAddRemove: false,
     });
@@ -43,7 +41,7 @@ export const useFabricCanvas = ({
     return () => {
       canvas.dispose();
     };
-  }, [scaledWidth, scaledHeight]);
+  }, [originalWidth, originalHeight]);
 
   // Function to add scaled objects to canvas
   const addScaledText = (
@@ -60,11 +58,11 @@ export const useFabricCanvas = ({
     if (!canvasRef.current) return;
 
     const scaledText = new fabric.Textbox(text, {
-      fontSize: fontSize * scaleFactor,
-      left: left * scaleFactor,
-      top: top * scaleFactor,
-      width: width * scaleFactor,
-      height: height * scaleFactor,
+      fontSize: fontSize,
+      left: left,
+      top: top,
+      width: width,
+      height: height,
       fill: color,
       fontFamily: fontFamily,
       fontWeight: getFontWeight(fontWeight),
@@ -81,44 +79,12 @@ export const useFabricCanvas = ({
   const exportCanvas = (): string | null => {
     if (!canvasRef.current) return null;
 
-    // Scale up for export
-    canvasRef.current.setDimensions({
-      width: originalWidth,
-      height: originalHeight,
+    const dataURL = canvasRef.current.toDataURL({
+      format: "jpeg",
+      quality: 1,
+      multiplier: 1,
     });
 
-    canvasRef.current.getObjects().forEach((obj) => {
-      obj.set({
-        scaleX: obj.scaleX! / scaleFactor,
-        scaleY: obj.scaleY! / scaleFactor,
-        left: obj.left! / scaleFactor,
-        top: obj.top! / scaleFactor,
-        width: obj.width! / scaleFactor,
-        height: obj.height! / scaleFactor,
-      });
-      obj.setCoords();
-    });
-
-    const dataURL = canvasRef.current.toDataURL();
-
-    // Reset back to scaled dimensions
-    canvasRef.current.setDimensions({
-      width: scaledWidth,
-      height: scaledHeight,
-    });
-    canvasRef.current.getObjects().forEach((obj) => {
-      obj.set({
-        scaleX: obj.scaleX! * scaleFactor,
-        scaleY: obj.scaleY! * scaleFactor,
-        left: obj.left! * scaleFactor,
-        top: obj.top! * scaleFactor,
-        width: obj.width! * scaleFactor,
-        height: obj.height! * scaleFactor,
-      });
-      obj.setCoords();
-    });
-
-    canvasRef.current.renderAll();
     return dataURL;
   };
 

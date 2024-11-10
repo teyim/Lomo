@@ -7,6 +7,7 @@ import { useFabricCanvas } from "@/hooks";
 import { canvasScaleFactor } from "@/constants";
 import SettingsPanel from "./panels/SettingsPanel";
 import LayerPanel from "./panels/LayerPanel";
+import ToolbarPanel from "./panels/ToolbarPanel";
 
 type TemplateEditorProps = {
   templateData: Template;
@@ -34,6 +35,9 @@ const styles = {
     "w-full h-full flex items-center justify-between overflow-hidden",
   sidePanel: "h-full overflow-y-auto",
   canvasWrapper: "flex-1 h-full flex justify-center items-center",
+  mobileMessage:
+    "hidden md:hidden w-full h-screen bg-slate-800 text-white flex items-center justify-center text-center px-4",
+  desktopContent: "hidden md:block w-full h-full",
 } as const;
 
 export default function TemplateEditor({ templateData }: TemplateEditorProps) {
@@ -43,8 +47,9 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
   );
   const [selectedElementUpdates, setSelectedElementUpdates] =
     useState(defaultElementState);
+  const [zoomLevel, setZoomLevel] = useState(1);
 
-  const { canvasRef, addScaledText } = useFabricCanvas({
+  const { canvasRef, addScaledText, exportCanvas } = useFabricCanvas({
     originalWidth: templateData.width,
     originalHeight: templateData.height,
     scaleFactor: canvasScaleFactor,
@@ -132,31 +137,78 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
     }
   };
 
+  const handleZoomIn = () => {
+    if (canvasRef.current && zoomLevel < 2) {
+      const newZoom = zoomLevel + 0.1;
+      setZoomLevel(newZoom);
+      canvasRef.current.setZoom(newZoom);
+      canvasRef.current.renderAll();
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (canvasRef.current && zoomLevel > 0.5) {
+      const newZoom = zoomLevel - 0.1;
+      setZoomLevel(newZoom);
+      canvasRef.current.setZoom(newZoom);
+      canvasRef.current.renderAll();
+    }
+  };
+
+  const handleExport = () => {
+    if (canvasRef.current) {
+      const dataURL = exportCanvas();
+      const link = document.createElement("a");
+      link.download = `${templateData.name}.png`;
+      link.href = dataURL || "";
+      link.click();
+    }
+  };
+
   return (
-    <div className={styles.container}>
-      <p className={styles.header}>
-        <span className="font-bold">Template</span>: {templateData.name}
-      </p>
+    <>
+      {/* Mobile Message */}
+      <div className={styles.mobileMessage}>
+        <h2 className="text-2xl font-semibold">
+          Not available on mobile devices
+        </h2>
+      </div>
 
-      <div className={styles.mainContent}>
-        <div className={styles.sidePanel}>
-          <LayerPanel assets={canvasRef.current?.getObjects()} />
-        </div>
+      {/* Desktop Content */}
+      <div className={styles.desktopContent}>
+        <div className={styles.container}>
+          <p className={styles.header}>
+            <span className="font-bold">Template</span>: {templateData.name}
+          </p>
 
-        <div className={styles.canvasWrapper}>
-          <canvas
-            id="canvas"
-            ref={canvasRef as unknown as React.LegacyRef<HTMLCanvasElement>}
+          <ToolbarPanel
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+            onExport={handleExport}
+            zoomLevel={zoomLevel}
           />
-        </div>
 
-        <div className={styles.sidePanel}>
-          <SettingsPanel
-            selectedElement={selectedElementUpdates}
-            onUpdate={handleElementUpdate}
-          />
+          <div className={styles.mainContent}>
+            <div className={styles.sidePanel}>
+              <LayerPanel assets={canvasRef.current?.getObjects() as any} />
+            </div>
+
+            <div className={styles.canvasWrapper}>
+              <canvas
+                id="canvas"
+                ref={canvasRef as unknown as React.LegacyRef<HTMLCanvasElement>}
+              />
+            </div>
+
+            <div className={styles.sidePanel}>
+              <SettingsPanel
+                selectedElement={selectedElementUpdates}
+                onUpdate={handleElementUpdate}
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
