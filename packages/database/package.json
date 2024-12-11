@@ -8,11 +8,11 @@
     "studio": "prisma studio"
   },
   "dependencies": {
-    "@prisma/client": "latest"
+    "@prisma/client": "^6.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
-    "prisma": "latest",
+    "prisma": "^6.0.1",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   },
