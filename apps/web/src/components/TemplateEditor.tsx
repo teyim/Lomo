@@ -8,6 +8,7 @@ import { canvasScaleFactor } from "@/constants";
 import SettingsPanel from "./panels/SettingsPanel";
 import LayerPanel from "./panels/LayerPanel";
 import ToolbarPanel from "./panels/ToolbarPanel";
+import backgroundImage from "public/images/Frame6.jpg";
 
 type TemplateEditorProps = {
   templateData: Template;
@@ -40,7 +41,6 @@ const styles = {
 } as const;
 
 export default function TemplateEditor({ templateData }: TemplateEditorProps) {
-  console.log(templateData);
   const [selectedElement, setSelectedElement] = useState<fabric.Text | null>(
     null
   );
@@ -48,15 +48,17 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
     useState(defaultElementState);
   const [zoomLevel, setZoomLevel] = useState(1);
 
-  const { canvasRef, addScaledText, exportCanvas } = useFabricCanvas({
-    originalWidth: templateData.width,
-    originalHeight: templateData.height,
-    scaleFactor: canvasScaleFactor,
-    backgroundColor: templateData.backgroundColor,
-  });
+  const { canvasRef, addScaledText, exportCanvas, setBackgroundImage } =
+    useFabricCanvas({
+      originalWidth: templateData.width,
+      originalHeight: templateData.height,
+      scaleFactor: canvasScaleFactor,
+      backgroundColor: templateData.backgroundColor,
+    });
 
   // Initialize canvas with template assets
   useEffect(() => {
+    console.log("useEeffect ran");
     if (!canvasRef.current) return;
 
     templateData.assets.forEach((asset) => {
@@ -72,6 +74,11 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
         asset.fontWeight
       );
     });
+
+    // Check if a background image is already set
+    if (!canvasRef.current.backgroundImage) {
+      setBackgroundImage(backgroundImage.src);
+    }
   }, []);
 
   // Setup canvas event listeners

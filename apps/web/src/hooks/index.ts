@@ -1,8 +1,10 @@
 import { useRouter } from "next/navigation";
 import { CanvasOptions, RouteParams } from "@/types";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
 import { getFontWeight } from "@/lib/utils";
+import backgroundImage from "public/images/Frame6.jpg";
+import { Scale } from "lucide-react";
 
 export const useDynamicNavigation = () => {
   const router = useRouter();
@@ -28,7 +30,6 @@ export const useFabricCanvas = ({
     if (!canvasRef.current) return;
 
     const canvas = new fabric.Canvas("canvas", {
-      backgroundColor: backgroundColor,
       width: originalWidth,
       height: originalHeight,
       preserveObjectStacking: true,
@@ -69,10 +70,33 @@ export const useFabricCanvas = ({
       textAlign: "center",
     });
 
-    console.log(scaledText);
     canvasRef.current.add(scaledText);
-
     canvasRef.current.renderAll();
+  };
+
+  // Function to set background image
+  const setBackgroundImage = (imageUrl: string) => {
+    console.log("ran-background add");
+    if (!canvasRef.current) return;
+
+    let tempBackgroundImage: fabric.FabricImage<
+      Partial<fabric.ImageProps>,
+      fabric.SerializedImageProps,
+      fabric.ObjectEvents
+    >;
+
+    fabric.FabricImage.fromURL(imageUrl).then((img) => {
+      (tempBackgroundImage = img),
+        tempBackgroundImage.scale(0.5),
+        (tempBackgroundImage.selectable = false),
+        (tempBackgroundImage.evented = false),
+        (tempBackgroundImage.top = 0),
+        (tempBackgroundImage.left = 0);
+
+      canvasRef?.current?.add(tempBackgroundImage);
+      canvasRef?.current?.sendObjectToBack(tempBackgroundImage);
+      canvasRef?.current?.renderAll();
+    });
   };
 
   // Function to export canvas at original scale
@@ -88,5 +112,5 @@ export const useFabricCanvas = ({
     return dataURL;
   };
 
-  return { canvasRef, addScaledText, exportCanvas };
+  return { canvasRef, addScaledText, exportCanvas, setBackgroundImage };
 };
