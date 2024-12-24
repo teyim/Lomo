@@ -14,48 +14,70 @@ datasource db {
 }
 
 
-// Enum for asset types
-enum AssetType {
-  IMAGE
-  TEXT
-  ICON
-}
-
 // Category model
 model Category {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   name      String    @unique
-  templates Template[]
+  backgrounds Background[]
 }
 
-// Template model
+// Background model
+model Background {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  name              String        @unique
+  imageUrl          String    
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  templates       Template[]
+  CategoryId      String         @db.ObjectId
+  Category        Category       @relation(fields: [CategoryId], references: [id], onDelete: Cascade)
+}
+
+// Enum for Layout Element Types
+enum LayoutElementType {
+  HEADING      
+  SUBHEADING   
+  IMAGE        
+}
+
+// LayoutElement model
+model LayoutElement {
+  id          String           @id @default(auto()) @map("_id") @db.ObjectId
+  layoutId    String           @db.ObjectId
+  layout      Layout           @relation(fields: [layoutId], references: [id], onDelete: Cascade)
+  type        LayoutElementType // Use the enum for element type
+  label       String           // Optional: Name or label for the element
+  positionX   Int              // X-coordinate of the element
+  positionY   Int              // Y-coordinate of the element
+  width       Int?             // Optional: Width of the element
+  height      Int?             // Optional: Height of the element
+  zIndex      Int?             // Optional: Layering of elements
+  defaultText String?          // Optional: Default text for text-based elements
+  fontSize    Int?             // Optional: Font size for text-based elements
+  color       String?          // Optional: Text color (solid or gradient)
+  fontFamily  String?          // Optional: Font family for text-based elements
+  fontWeight  String?          // Optional: Font weight for text-based elements
+  imageUrl    String?          // Optional: Image URL for image-based elements
+}
+
+// Layout model
+model Layout {
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  name              String           // Layout name or description
+  elements          LayoutElement[]  // Associated elements for the layout
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  templates         Template[]
+}
+
 model Template {
-  id               String     @id @default(auto()) @map("_id") @db.ObjectId
-  name             String
-  img              String              
-  width            Int
-  height           Int
-  backgroundColor  String
-  categoryId       String     @db.ObjectId
-  category         Category   @relation(fields: [categoryId], references: [id])
-  assets           Asset[]
-}
-
-// Asset model
-model Asset {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  templateId  String   @db.ObjectId
-  template    Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
-  type        AssetType
-  label       String
-  url         String?  // Used only for IMAGE and ICON types
-  positionX   Int
-  positionY   Int
-  width       Int?
-  height      Int?
-  defaultText String?  // Used only for TEXT type
-  fontSize    Int?     // Used only for TEXT type
-  color       String?  // Used only for TEXT type
-  fontFamily  String?  // Used only for TEXT type
-  fontWeight  String?  // Used only for TEXT type
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  name          String        // Template name
+  backgroundId  String        @db.ObjectId
+  background    Background    @relation(fields: [backgroundId], references: [id])
+  layoutId      String        @db.ObjectId
+  layout        Layout        @relation(fields: [layoutId], references: [id])
+  isDefault     Boolean       @default(false) // Flags this as the default template
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }

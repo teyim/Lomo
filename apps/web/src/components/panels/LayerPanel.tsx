@@ -19,7 +19,7 @@ export default function LayerPanel({ assets }: LayerPanelProps) {
   console.log(assets);
 
   return (
-    <div className="absolute left-2 top-[35%] w-[230px] h-[250px] bg-slate-800 backdrop-blur-sm rounded-xl shadow-lg text-white ring-1 ring-white">
+    <div className="z-50 absolute left-2 md:bottom-2 lg:top-[35%] w-[230px] h-[250px] bg-slate-800 backdrop-blur-sm rounded-xl shadow-lg text-white ring-1 ring-white">
       <h6 className="p-3 font-mono text-sm font-bold">Layers</h6>
       <Separator className="bg-white/35" />
       <div className="space-y-2 p-2 h-[210px] overflow-y-auto">

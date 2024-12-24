@@ -7,6 +7,8 @@ import { useFabricCanvas } from "@/hooks";
 import { canvasScaleFactor } from "@/constants";
 import SettingsPanel from "./panels/SettingsPanel";
 import LayerPanel from "./panels/LayerPanel";
+import ToolbarPanel from "./panels/ToolbarPanel";
+import backgroundImage from "public/images/Frame6.jpg";
 
 type TemplateEditorProps = {
   templateData: Template;
@@ -34,25 +36,29 @@ const styles = {
     "w-full h-full flex items-center justify-between overflow-hidden",
   sidePanel: "h-full overflow-y-auto",
   canvasWrapper: "flex-1 h-full flex justify-center items-center",
+
+  desktopContent: " w-full h-full",
 } as const;
 
 export default function TemplateEditor({ templateData }: TemplateEditorProps) {
-  console.log(templateData);
   const [selectedElement, setSelectedElement] = useState<fabric.Text | null>(
     null
   );
   const [selectedElementUpdates, setSelectedElementUpdates] =
     useState(defaultElementState);
+  const [zoomLevel, setZoomLevel] = useState(1);
 
-  const { canvasRef, addScaledText } = useFabricCanvas({
-    originalWidth: templateData.width,
-    originalHeight: templateData.height,
-    scaleFactor: canvasScaleFactor,
-    backgroundColor: templateData.backgroundColor,
-  });
+  const { canvasRef, addScaledText, exportCanvas, setBackgroundImage } =
+    useFabricCanvas({
+      originalWidth: templateData.width,
+      originalHeight: templateData.height,
+      scaleFactor: canvasScaleFactor,
+      backgroundColor: templateData.backgroundColor,
+    });
 
   // Initialize canvas with template assets
   useEffect(() => {
+    console.log("useEeffect ran");
     if (!canvasRef.current) return;
 
     templateData.assets.forEach((asset) => {
@@ -68,6 +74,11 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
         asset.fontWeight
       );
     });
+
+    // Check if a background image is already set
+    if (!canvasRef.current.backgroundImage) {
+      setBackgroundImage(backgroundImage.src);
+    }
   }, []);
 
   // Setup canvas event listeners
@@ -132,31 +143,71 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
     }
   };
 
+  const handleZoomIn = () => {
+    if (canvasRef.current && zoomLevel < 2) {
+      const newZoom = zoomLevel + 0.1;
+      setZoomLevel(newZoom);
+      canvasRef.current.setZoom(newZoom);
+      canvasRef.current.renderAll();
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (canvasRef.current && zoomLevel > 0.5) {
+      const newZoom = zoomLevel - 0.1;
+      setZoomLevel(newZoom);
+      canvasRef.current.setZoom(newZoom);
+      canvasRef.current.renderAll();
+    }
+  };
+
+  const handleExport = () => {
+    if (canvasRef.current) {
+      const dataURL = exportCanvas();
+      const link = document.createElement("a");
+      link.download = `${templateData.name}.png`;
+      link.href = dataURL || "";
+      link.click();
+    }
+  };
+
   return (
-    <div className={styles.container}>
-      <p className={styles.header}>
-        <span className="font-bold">Template</span>: {templateData.name}
-      </p>
+    <>
+      {/* Desktop Content */}
+      <div className={styles.desktopContent}>
+        <div className={styles.container}>
+          <p className={styles.header}>
+            <span className="font-bold">Template</span>: {templateData.name}
+          </p>
 
-      <div className={styles.mainContent}>
-        <div className={styles.sidePanel}>
-          <LayerPanel assets={canvasRef.current?.getObjects()} />
-        </div>
-
-        <div className={styles.canvasWrapper}>
-          <canvas
-            id="canvas"
-            ref={canvasRef as unknown as React.LegacyRef<HTMLCanvasElement>}
+          <ToolbarPanel
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+            onExport={handleExport}
+            zoomLevel={zoomLevel}
           />
-        </div>
 
-        <div className={styles.sidePanel}>
-          <SettingsPanel
-            selectedElement={selectedElementUpdates}
-            onUpdate={handleElementUpdate}
-          />
+          <div className={styles.mainContent}>
+            <div className={styles.sidePanel}>
+              <LayerPanel assets={canvasRef.current?.getObjects() as any} />
+            </div>
+
+            <div className={styles.canvasWrapper}>
+              <canvas
+                id="canvas"
+                ref={canvasRef as unknown as React.LegacyRef<HTMLCanvasElement>}
+              />
+            </div>
+
+            <div className={styles.sidePanel}>
+              <SettingsPanel
+                selectedElement={selectedElementUpdates}
+                onUpdate={handleElementUpdate}
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
