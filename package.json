@@ -10,7 +10,9 @@
     "lint": "turbo run lint",
     "test": "turbo run test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "aws-sdk": "^2.1692.0"
+  },
   "devDependencies": {
     "prettier": "^3.2.5",
     "turbo": "^2.1.3"

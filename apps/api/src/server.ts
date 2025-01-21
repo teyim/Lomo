@@ -1,6 +1,7 @@
 import { json, urlencoded } from "body-parser";
 import express, { type Express } from "express";
 import templateController from "./modules/template/handler";
+import backgroundHandler from "./modules/background/handler";
 import morgan from "morgan";
 import cors from "cors";
 import { errorHandler } from "./middleware/errorHandler";
@@ -13,7 +14,8 @@ export const createServer = (): Express => {
     .use(urlencoded({ extended: true }))
     .use(json())
     .use(cors())
-    .use("/api", templateController)
+    .use("/templates", templateController)
+    .use("/backgrounds", backgroundHandler)
     .use(errorHandler)
     .get("/", (req, res) => {
       res.send({ message: "Hello API" });
