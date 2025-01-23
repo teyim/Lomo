@@ -24,16 +24,20 @@ export const getTemplateByIdController = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { id } = req.params;
-  const template = await getTemplateByIdService(id);
+  try {
+    const { id } = req.params;
+    const template = await getTemplateByIdService(id);
 
-  // If template not found, propagate a 404 error
-  if (!template) {
-    const error: ErrorWithStatus = new Error("Template not found");
-    error.status = 404;
+    // If template not found, propagate a 404 error
+    if (!template) {
+      const error: ErrorWithStatus = new Error("Template not found");
+      error.status = 404;
+      return next(error);
+    }
+
+    // If template found, return it
+    res.status(200).json(template);
+  } catch (error) {
     return next(error);
   }
-
-  // If template found, return it
-  res.status(200).json(template);
 };
