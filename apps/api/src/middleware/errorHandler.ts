@@ -1,4 +1,5 @@
-import { ErrorWithStatus } from "../types/index";
+import { HttpStatusCode } from "../constants";
+import { ErrorWithStatus } from "../types/error";
 import { NextFunction, Request, Response } from "express";
 
 export const errorHandler = (
@@ -7,10 +8,8 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ): void => {
-  const statusCode = err.status || 500;
+  const statusCode = err.status || HttpStatusCode.InternalServerError;
   const message = err.message || "Internal Server Error";
-
-  console.error(`[ERROR]: ${message} - Status Code: ${statusCode}`);
 
   res.status(statusCode).json({
     status: "error",
