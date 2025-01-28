@@ -13,10 +13,10 @@ export const getDataAccessErrorMessage = (
   return `Error ${actionMessage} ${component} from the database`;
 };
 
-export function handleError(error: unknown) {
+export function handleError(error: any) {
   if (error instanceof ErrorWithStatus) {
     throw error; 
   } else {
-    console.error('Unknown error:', error);
+    throw new Error(error);
   }
 }
