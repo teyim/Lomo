@@ -10,6 +10,16 @@ export const addBackground = async (
   recommendedColors: string
 ) => {
   try {
+    // Validate and parse recommendedColors
+    let parsedColors = {};
+    if (recommendedColors) {
+      try {
+        parsedColors = JSON.parse(recommendedColors);
+      } catch (parseError:any) {
+        throw new Error(`Invalid recommendedColors format: ${parseError?.message}`);
+      }
+    }
+
     const background = await prisma.background.create({
       data: {
         name: name,
@@ -21,9 +31,22 @@ export const addBackground = async (
     });
     return background;
   } catch (error) {
+    if(error instanceof Error) {
+      if (error.message.startsWith("Background with name")) {
+        console.error(`Duplicate entry: ${error.message}`);
+        throw error;
+      }
+      if (error.message.startsWith("Invalid recommendedColors")) {
+        console.error(`JSON Parse Error: ${error.message}`);
+        throw new Error("Invalid color format. Please provide valid JSON format for recommended colors");
+      }
+    }
+
+    // Generic error handling
     console.error(getDataAccessErrorMessage("background", "create"), error);
     throw new Error(getDataAccessErrorMessage("background", "create"));
   }
+
 };
 
 export const getBackgroundByIdWithTemplates = async (

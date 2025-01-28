@@ -19,18 +19,13 @@ export const addBackgroundController = async (
     const { recommendedColors, name } = req.body;
     const imgUrl = (req.file as Express.MulterS3.File)?.location;
     
-    console.log(imgUrl)
-
-    console.log("file", req.file);
-
-    console.log("imgurl", imgUrl);
 
     const background = await addBackgroundService(
       name,
       imgUrl,
       recommendedColors
     );
-
+    
     res.status(201).json({ success: true, background });
   } catch (error) {
     return next(error);

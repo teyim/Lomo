@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { addBackgroundController, deleteBackgroundController } from "./controller";
 import upload from "../../utils/upload";
+import { checkBackgroundExists } from "../../middleware";
 
 const router = Router();
 
