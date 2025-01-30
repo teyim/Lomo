@@ -29,7 +29,7 @@ export default function LayerPanel({ assets }: LayerPanelProps) {
               key={index}
               className={twMerge(
                 baseLayerItemStyles,
-                asset.selected && "bg-gray-100/30 hover:bg-gray-100/30"
+                asset.selected && "bg-gray-100/30 hover:bg-gray-100/30",
               )}
             >
               <div className="flex items-center space-x-2">

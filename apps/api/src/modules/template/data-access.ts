@@ -19,7 +19,7 @@ export const fetchTemplates = async (): Promise<Template[] | []> => {
 
 // get template by id
 export const fetchTemplateById = async (
-  id: string
+  id: string,
 ): Promise<Template | null> => {
   try {
     // Fetch the template from the database

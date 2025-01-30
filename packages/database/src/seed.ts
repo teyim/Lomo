@@ -21,7 +21,7 @@ const extractTextData = (frame: any): any[] => {
         ? rgbToHex(
             text.fills[0].color.r,
             text.fills[0].color.g,
-            text.fills[0].color.b
+            text.fills[0].color.b,
           )
         : null,
       fontFamily: text.fontName?.family,
@@ -61,7 +61,7 @@ const seedCategories = async (categories: string[]): Promise<void> => {
 // Create a template with its assets (text elements)
 const createTemplate = async (
   frameData: any,
-  textData: any[]
+  textData: any[],
 ): Promise<void> => {
   try {
     const categoryId = await getCategoryId(frameData.category);
@@ -105,7 +105,7 @@ const seedDatabase = async () => {
           ? rgbToHex(
               figmaData.fills[0].color.r,
               figmaData.fills[0].color.g,
-              figmaData.fills[0].color.b
+              figmaData.fills[0].color.b,
             )
           : null,
         category: figmaData.category,

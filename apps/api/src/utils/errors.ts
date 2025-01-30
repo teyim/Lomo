@@ -4,7 +4,7 @@ import { ErrorWithStatus } from "../types/error";
 
 export const getDataAccessErrorMessage = (
   component: string,
-  action: DatabaseActions
+  action: DatabaseActions,
 ): string => {
   const actionMessage = crudErrorMessages[action];
   if (!actionMessage) {
@@ -15,7 +15,7 @@ export const getDataAccessErrorMessage = (
 
 export function handleError(error: any) {
   if (error instanceof ErrorWithStatus) {
-    throw error; 
+    throw error;
   } else {
     throw new Error(error);
   }

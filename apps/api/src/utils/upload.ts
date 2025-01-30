@@ -13,14 +13,14 @@ const upload = multer({
     metadata: function (
       req: Request,
       file: any,
-      cb: (error: Error | null, metadata?: object) => void
+      cb: (error: Error | null, metadata?: object) => void,
     ) {
       cb(null, { fieldName: file.fieldname });
     },
     key: (
       req: Request,
       file: any,
-      cb: (error: Error | null, key?: string) => void
+      cb: (error: Error | null, key?: string) => void,
     ) => {
       const uniqueName = `backgrounds/${Date.now()}-${file.originalname}`;
       cb(null, uniqueName);

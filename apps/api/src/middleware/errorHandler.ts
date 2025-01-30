@@ -6,7 +6,7 @@ export const errorHandler = (
   err: ErrorWithStatus,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   const statusCode = err.status || HttpStatusCode.InternalServerError;
   const message = err.message || "Internal Server Error";

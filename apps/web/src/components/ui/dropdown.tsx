@@ -36,7 +36,7 @@ const Dropdown = ({
       <SelectTrigger
         className={twMerge(
           "w-[180px] ring-slate-900 ring-1 rounded-xl h-[40px]",
-          className
+          className,
         )}
       >
         <SelectValue placeholder={placeholder} />

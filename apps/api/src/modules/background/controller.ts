@@ -7,7 +7,7 @@ import { HttpStatusCode } from "../../constants";
 export const addBackgroundController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     if (!req.file) {
@@ -18,14 +18,13 @@ export const addBackgroundController = async (
 
     const { recommendedColors, name } = req.body;
     const imgUrl = (req.file as Express.MulterS3.File)?.location;
-    
 
     const background = await addBackgroundService(
       name,
       imgUrl,
-      recommendedColors
+      recommendedColors,
     );
-    
+
     res.status(201).json({ success: true, background });
   } catch (error) {
     return next(error);
@@ -36,7 +35,7 @@ export const addBackgroundController = async (
 export const deleteBackgroundController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const { id } = req.params;
