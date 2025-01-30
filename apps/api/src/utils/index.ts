@@ -9,23 +9,13 @@ export function rgbToHex(r: number, g: number, b: number): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
-export const getS3Key = (imageUrl: string, bucketName: string): string => {
-  const parsedUrl = new URL(imageUrl);
-  const pathParts = parsedUrl.pathname.split("/").filter((part) => part !== "");
-
-  if (pathParts[0] === bucketName) {
-    return pathParts.slice(1).join("/");
-  } else {
-    return parsedUrl.pathname.substring(1);
-  }
-};
-
 export const deleteS3Object = async (
   bucket: string,
   key: string,
-): Promise<void> => {
+) => {
   try {
-    await s3.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
+    const data = await s3.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
+    return data
   } catch (error) {
     console.error("Error deleting S3 object:", error);
     throw new Error("Failed to delete S3 object");

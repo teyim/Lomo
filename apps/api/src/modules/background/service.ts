@@ -7,15 +7,16 @@ import {
 
 import { ENV_variables, ErrorMessages, HttpStatusCode } from "../../constants";
 import { handleError } from "../../utils/errors";
-import { deleteS3Object, getS3Key } from "../../utils";
+import { deleteS3Object } from "../../utils";
 
 export const addBackgroundService = async (
   name: string,
   imgUrl: string,
+  imgKey: string,
   recommendedColors: any,
 ) => {
   try {
-    const background = await addBackground(name, imgUrl, recommendedColors);
+    const background = await addBackground(name, imgUrl, imgKey, recommendedColors);
     return background;
   } catch (error) {
     handleError(error);
@@ -26,7 +27,7 @@ export const deleteBackgroundService = async (id: string): Promise<void> => {
   try {
     // Check if background exists and get associated templates
     const background = await getBackgroundByIdWithTemplates(id);
-    console.log(background);
+
     if (!background) {
       throw new ErrorWithStatus(
         ErrorMessages.BACKGROUND.NOT_FOUND,
@@ -42,12 +43,19 @@ export const deleteBackgroundService = async (id: string): Promise<void> => {
       );
     }
 
-    // Extract S3 key from image URL
-    const key = getS3Key(background.imageUrl, ENV_variables.AWS_S3_BUCKET);
 
     // Delete from S3 and database
-    await deleteS3Object(ENV_variables.AWS_S3_BUCKET, key);
-    await deleteBackgroundById(id);
+    const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, background.imgKey);
+    if (!!isDeleted) {
+      await deleteBackgroundById(id);
+    }
+    else {
+      throw new ErrorWithStatus(
+        "Error deleting background in S3 Bucket ",
+        500,
+      );
+    }
+
   } catch (error: any) {
     if (error instanceof ErrorWithStatus) throw error;
     throw new ErrorWithStatus(

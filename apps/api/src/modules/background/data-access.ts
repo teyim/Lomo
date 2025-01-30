@@ -2,7 +2,7 @@ import { PrismaClient, Template } from "@prisma/client";
 import { Background } from "@prisma/client";
 import { getDataAccessErrorMessage } from "../../utils/errors";
 import { ENV_variables, HttpStatusCode } from "../../constants";
-import { getS3Key, deleteS3Object } from "../../utils";
+import { deleteS3Object } from "../../utils";
 import { ErrorWithStatus } from "../../types/error";
 
 const prisma = new PrismaClient();
@@ -10,6 +10,7 @@ const prisma = new PrismaClient();
 export const addBackground = async (
   name: string,
   imgUrl: string,
+  imgkey: string,
   recommendedColors: string,
 ) => {
   try {
@@ -17,19 +18,20 @@ export const addBackground = async (
       where: { name },
     });
 
-    if (!!existingBackground) {
-      // Extract S3 key from image URL
-      const key = getS3Key(
-        existingBackground.imageUrl,
-        ENV_variables.AWS_S3_BUCKET,
-      );
+    if (existingBackground?.id) {
 
-      // Delete from S3 and database
-      await deleteS3Object(ENV_variables.AWS_S3_BUCKET, key);
+      const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, imgkey);
 
-      throw new ErrorWithStatus(
-        `Background with name: ${existingBackground.name} already exist`, HttpStatusCode.Conflict
-      );
+      if (!!isDeleted) {
+        throw new ErrorWithStatus(
+          `Background with name: "${existingBackground.name}" already exists`,
+          HttpStatusCode.Conflict
+        );
+      }
+      else {
+        throw new ErrorWithStatus("Failed to delete S3 object", HttpStatusCode.InternalServerError);
+      }
+
     }
     // Validate and parse recommendedColors
     let parsedColors = {};
@@ -47,6 +49,7 @@ export const addBackground = async (
       data: {
         name: name,
         imageUrl: imgUrl,
+        imgKey: imgkey,
         recommendedColors: recommendedColors
           ? JSON.parse(recommendedColors)
           : {},
@@ -59,6 +62,7 @@ export const addBackground = async (
         console.error(`Duplicate entry: ${error.message}`);
         throw new ErrorWithStatus(error?.message, error.status)
       }
+
       if (error.message.startsWith("Invalid recommendedColors")) {
         console.error(`JSON Parse Error: ${error.message}`);
         throw new Error(

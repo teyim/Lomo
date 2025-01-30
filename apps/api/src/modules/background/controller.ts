@@ -18,10 +18,12 @@ export const addBackgroundController = async (
 
     const { recommendedColors, name } = req.body;
     const imgUrl = (req.file as Express.MulterS3.File)?.location;
+    const imgKey = (req.file as Express.MulterS3.File)?.key;
 
     const background = await addBackgroundService(
       name,
       imgUrl,
+      imgKey,
       recommendedColors,
     );
 
@@ -45,7 +47,7 @@ export const deleteBackgroundController = async (
       return next(error);
     }
     await deleteBackgroundService(id);
-    res.status(204).send();
+    res.status(204).json({ message: "background deleted" });
   } catch (error) {
     next(error);
   }
