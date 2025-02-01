@@ -92,11 +92,71 @@ export const getBackgroundByIdWithTemplates = async (
   }
 };
 
+export const getAllBackgrounds = async (): Promise<Background[] | null> => {
+  try {
+    const backgrounds = await prisma.background.findMany();
+    return backgrounds;
+  } catch (error) {
+    console.error(getDataAccessErrorMessage("background", "get"), error);
+    throw new Error(getDataAccessErrorMessage("background", "get"));
+  }
+};
+
 export const deleteBackgroundById = async (id: string): Promise<void> => {
   try {
     await prisma.background.delete({ where: { id } });
   } catch (error) {
     console.error(getDataAccessErrorMessage("background", "delete"), error);
     throw new Error(getDataAccessErrorMessage("background", "delete"));
+  }
+};
+
+export const updateBackground = async (
+  id: string,
+  name: string,
+  newImgUrl: string,
+  newImgKey: string,
+  recommendedColors: string
+) => {
+  try {
+    // Get existing background
+    const existingBackground = await prisma.background.findUnique({
+      where: { id },
+    });
+
+    if (!existingBackground) {
+      throw new ErrorWithStatus(
+        "Background not found",
+        HttpStatusCode.NotFound
+      );
+    }
+
+    // Delete existing image from S3
+    const isDeleted = await deleteS3Object(
+      ENV_variables.AWS_S3_BUCKET,
+      existingBackground.imgKey
+    );
+
+    if (!!isDeleted) {
+      // Update background with new image
+      const updatedBackground = await prisma.background.update({
+        where: { id },
+        data: {
+          name: name,
+          imageUrl: newImgUrl,
+          imgKey: newImgKey,
+          recommendedColors: recommendedColors
+        },
+      });
+      return updatedBackground;
+    } else {
+      throw new ErrorWithStatus(
+        "Failed to delete old image from S3",
+        HttpStatusCode.InternalServerError
+      );
+    }
+  } catch (error) {
+    console.error(getDataAccessErrorMessage("background", "update"), error);
+    throw new Error(getDataAccessErrorMessage("background", "update"));
   }
 };

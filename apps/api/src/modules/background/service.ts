@@ -1,4 +1,4 @@
-import { addBackground } from "./data-access";
+import { addBackground, getAllBackgrounds, updateBackground } from "./data-access";
 import { ErrorWithStatus } from "../../types/error";
 import {
   getBackgroundByIdWithTemplates,
@@ -8,6 +8,7 @@ import {
 import { ENV_variables, ErrorMessages, HttpStatusCode } from "../../constants";
 import { handleError } from "../../utils/errors";
 import { deleteS3Object } from "../../utils";
+import { Background } from "@repo/db";
 
 export const addBackgroundService = async (
   name: string,
@@ -62,5 +63,36 @@ export const deleteBackgroundService = async (id: string): Promise<void> => {
       "Error deleting background: " + error.message,
       500,
     );
+  }
+};
+
+export const getAllBackgroundsService = async () => {
+  try {
+    const backgrounds = await getAllBackgrounds();
+    return backgrounds;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+
+export const updateBackgroundService = async (
+  id: string,
+  name: string,
+  newImgUrl: string,
+  newImgKey: string,
+  recommendedColors: string
+) => {
+  try {
+    const updatedBackground = await updateBackground(
+      id,
+      name,
+      newImgUrl,
+      newImgKey,
+      recommendedColors
+    );
+    return updatedBackground;
+  } catch (error) {
+    handleError(error);
   }
 };
