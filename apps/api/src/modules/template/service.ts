@@ -12,7 +12,7 @@ export const getTemplatesService = async (): Promise<Template[] | []> => {
 };
 
 export const getTemplateByIdService = async (
-  templateId: string
+  templateId: string,
 ): Promise<Template | null> => {
   try {
     const template = await fetchTemplateById(templateId);

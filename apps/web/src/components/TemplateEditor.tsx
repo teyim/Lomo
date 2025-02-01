@@ -42,7 +42,7 @@ const styles = {
 
 export default function TemplateEditor({ templateData }: TemplateEditorProps) {
   const [selectedElement, setSelectedElement] = useState<fabric.Text | null>(
-    null
+    null,
   );
   const [selectedElementUpdates, setSelectedElementUpdates] =
     useState(defaultElementState);
@@ -71,7 +71,7 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
         asset.height,
         asset.color,
         asset.fontFamily,
-        asset.fontWeight
+        asset.fontWeight,
       );
     });
 
@@ -134,7 +134,7 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
   };
 
   const handleElementUpdate = (
-    updates: Partial<typeof selectedElementUpdates>
+    updates: Partial<typeof selectedElementUpdates>,
   ) => {
     if (selectedElement) {
       selectedElement.set(updates);

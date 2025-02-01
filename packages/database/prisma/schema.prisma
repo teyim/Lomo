@@ -25,7 +25,8 @@ datasource db {
 model Background {
   id                String        @id @default(auto()) @map("_id") @db.ObjectId
   name              String        @unique
-  imageUrl          String    
+  imageUrl          String
+  imgKey            String    
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
   templates       Template[]
@@ -62,8 +63,9 @@ model LayoutElement {
 // Layout model
 model Layout {
   id                String           @id @default(auto()) @map("_id") @db.ObjectId
-  name              String           // Layout name or description
+  name              String           // Layout name
   elements          LayoutElement[]  // Associated elements for the layout
+  previewimage      String           // layout preview
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
   templates         Template[]

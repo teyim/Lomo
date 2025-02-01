@@ -8,7 +8,7 @@ import { ErrorWithStatus } from "../../types/index";
 export const getTemplatesController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const templates = await getTemplatesService();
@@ -22,7 +22,7 @@ export const getTemplatesController = async (
 export const getTemplateByIdController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const { id } = req.params;

@@ -4,7 +4,7 @@ import { ErrorWithStatus } from "../types/error";
 
 export const getDataAccessErrorMessage = (
   component: string,
-  action: DatabaseActions
+  action: DatabaseActions,
 ): string => {
   const actionMessage = crudErrorMessages[action];
   if (!actionMessage) {
@@ -13,10 +13,10 @@ export const getDataAccessErrorMessage = (
   return `Error ${actionMessage} ${component} from the database`;
 };
 
-export function handleError(error: unknown) {
+export function handleError(error: any) {
   if (error instanceof ErrorWithStatus) {
-    throw error; 
+    throw error;
   } else {
-    console.error('Unknown error:', error);
+    throw new Error(error);
   }
 }

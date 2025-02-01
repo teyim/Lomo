@@ -54,7 +54,7 @@ export const useFabricCanvas = ({
     height: number,
     color: string,
     fontFamily: string,
-    fontWeight: string
+    fontWeight: string,
   ) => {
     if (!canvasRef.current) return;
 
