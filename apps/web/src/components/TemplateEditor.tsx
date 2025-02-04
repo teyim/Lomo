@@ -18,7 +18,7 @@ import { useShallow } from "zustand/shallow";
 
 type TemplateEditorProps = {
   templateData: Template | [];
-  backgroundData: Background[]
+  backgroundData: Background[];
 };
 
 // Default state for selected element
@@ -47,8 +47,13 @@ const styles = {
   desktopContent: " w-full h-full",
 } as const;
 
-export default function TemplateEditor({ templateData, backgroundData }: TemplateEditorProps) {
-  const { selectedBackground } = useBlogThumbnailStore(useShallow((state) => ({ selectedBackground: state.selectedBackground })))
+export default function TemplateEditor({
+  templateData,
+  backgroundData,
+}: TemplateEditorProps) {
+  const { selectedBackground } = useBlogThumbnailStore(
+    useShallow((state) => ({ selectedBackground: state.selectedBackground })),
+  );
 
   const [selectedElement, setSelectedElement] = useState<fabric.Text | null>(
     null,
@@ -62,14 +67,13 @@ export default function TemplateEditor({ templateData, backgroundData }: Templat
       originalWidth: 1000,
       originalHeight: 420,
       scaleFactor: 1,
-      backgroundColor: "white"
+      backgroundColor: "white",
     });
 
   // Initialize canvas with template assets
   useEffect(() => {
     console.log("useEeffect ran");
     if (!canvasRef.current) return;
-
 
     // addScaledText(
     //   defaultElementState.text,
@@ -81,7 +85,6 @@ export default function TemplateEditor({ templateData, backgroundData }: Templat
     //   defaultElementState.fontFamily,
     //   "bold"
     // );
-
 
     // Check if a background image is already set
     if (selectedBackground?.imageUrl) {
@@ -205,20 +208,22 @@ export default function TemplateEditor({ templateData, backgroundData }: Templat
               <canvas
                 id="canvas"
                 ref={canvasRef as unknown as React.LegacyRef<HTMLCanvasElement>}
-              /> 
-              {!selectedBackground && <div className=" absolute z-10 flex-col justify-center  ">
-                <div>
-                  <Image
-                    src={emptystateImage}
-                    alt="empty state"
-                    className="w-[300px] h-[300px] mx-auto"
-                  />
+              />
+              {!selectedBackground && (
+                <div className=" absolute z-10 flex-col justify-center  ">
+                  <div>
+                    <Image
+                      src={emptystateImage}
+                      alt="empty state"
+                      className="w-[300px] h-[300px] mx-auto"
+                    />
+                  </div>
+                  <h5>
+                    Please select a background and a corresponding layout to
+                    start or Select a Template
+                  </h5>
                 </div>
-                <h5>
-                  Please select a background and a corresponding layout to
-                  start or Select a Template
-                </h5>
-              </div>}
+              )}
             </div>
 
             {/* <div className={styles.sidePanel}>

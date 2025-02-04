@@ -31,12 +31,13 @@ export const getBlogPostById = async (id: string) => {
 };
 
 export const getAllBackgrounds = async () => {
-  const response = await fetch(`${baseUrl}/backgrounds`)
+  const response = await fetch(`${baseUrl}/backgrounds`);
 
   if (!response.ok) {
     throw new Error(`${response.status}`);
   }
 
-  const data: { success: boolean, backgrounds: Background[] } = await response.json();
+  const data: { success: boolean; backgrounds: Background[] } =
+    await response.json();
   return data;
-}
+};

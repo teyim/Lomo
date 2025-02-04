@@ -2,14 +2,13 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import {X} from "lucide-react"
+import { X } from "lucide-react";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
 }
-
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
@@ -45,12 +44,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
           onClick={onClose}
           aria-label="Close modal"
         >
-          <X size={15}/>
+          <X size={15} />
         </button>
         {children}
       </div>
     </div>,
-    modalRoot
+    modalRoot,
   );
 };
 

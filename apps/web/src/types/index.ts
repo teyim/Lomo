@@ -51,10 +51,10 @@ export type CanvasOptions = {
 };
 
 export type ThumbnailBackgroundData = {
-  name: string,
-  imageUrl: string,
+  name: string;
+  imageUrl: string;
   recommendedColors: {
-    primary: string,
-    secondary: string
-  }
-}
+    primary: string;
+    secondary: string;
+  };
+};

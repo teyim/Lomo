@@ -1,4 +1,8 @@
-import { addBackground, getAllBackgrounds, updateBackground } from "./data-access";
+import {
+  addBackground,
+  getAllBackgrounds,
+  updateBackground,
+} from "./data-access";
 import { ErrorWithStatus } from "../../types/error";
 import {
   getBackgroundByIdWithTemplates,
@@ -17,7 +21,12 @@ export const addBackgroundService = async (
   recommendedColors: any,
 ) => {
   try {
-    const background = await addBackground(name, imgUrl, imgKey, recommendedColors);
+    const background = await addBackground(
+      name,
+      imgUrl,
+      imgKey,
+      recommendedColors,
+    );
     return background;
   } catch (error) {
     handleError(error);
@@ -44,19 +53,16 @@ export const deleteBackgroundService = async (id: string): Promise<void> => {
       );
     }
 
-
     // Delete from S3 and database
-    const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, background.imgKey);
+    const isDeleted = await deleteS3Object(
+      ENV_variables.AWS_S3_BUCKET,
+      background.imgKey,
+    );
     if (!!isDeleted) {
       await deleteBackgroundById(id);
+    } else {
+      throw new ErrorWithStatus("Error deleting background in S3 Bucket ", 500);
     }
-    else {
-      throw new ErrorWithStatus(
-        "Error deleting background in S3 Bucket ",
-        500,
-      );
-    }
-
   } catch (error: any) {
     if (error instanceof ErrorWithStatus) throw error;
     throw new ErrorWithStatus(
@@ -75,13 +81,12 @@ export const getAllBackgroundsService = async () => {
   }
 };
 
-
 export const updateBackgroundService = async (
   id: string,
   name: string,
   newImgUrl: string,
   newImgKey: string,
-  recommendedColors: string
+  recommendedColors: string,
 ) => {
   try {
     const updatedBackground = await updateBackground(
@@ -89,7 +94,7 @@ export const updateBackgroundService = async (
       name,
       newImgUrl,
       newImgKey,
-      recommendedColors
+      recommendedColors,
     );
     return updatedBackground;
   } catch (error) {

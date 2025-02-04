@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-'use client';
+"use client";
 
-import Modal from '@/components/Modal';
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import Modal from "@/components/Modal";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface ModalContextType {
   showModal: (content: ReactNode) => void;
@@ -11,7 +11,9 @@ interface ModalContextType {
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
-export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const ModalProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [modalContent, setModalContent] = useState<ReactNode | null>(null);
 
   const showModal = (content: ReactNode) => {
@@ -25,7 +27,11 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   return (
     <ModalContext.Provider value={{ showModal, hideModal }}>
       {children}
-      {modalContent && <Modal isOpen={!!modalContent} onClose={hideModal}>{modalContent}</Modal>}
+      {modalContent && (
+        <Modal isOpen={!!modalContent} onClose={hideModal}>
+          {modalContent}
+        </Modal>
+      )}
     </ModalContext.Provider>
   );
 };
@@ -33,7 +39,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 export const useModal = (): ModalContextType => {
   const context = useContext(ModalContext);
   if (!context) {
-    throw new Error('useModal must be used within a ModalProvider');
+    throw new Error("useModal must be used within a ModalProvider");
   }
   return context;
 };

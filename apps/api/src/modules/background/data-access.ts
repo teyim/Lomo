@@ -19,19 +19,22 @@ export const addBackground = async (
     });
 
     if (existingBackground?.id) {
-
-      const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, imgkey);
+      const isDeleted = await deleteS3Object(
+        ENV_variables.AWS_S3_BUCKET,
+        imgkey,
+      );
 
       if (!!isDeleted) {
         throw new ErrorWithStatus(
           `Background with name: "${existingBackground.name}" already exists`,
-          HttpStatusCode.Conflict
+          HttpStatusCode.Conflict,
+        );
+      } else {
+        throw new ErrorWithStatus(
+          "Failed to delete S3 object",
+          HttpStatusCode.InternalServerError,
         );
       }
-      else {
-        throw new ErrorWithStatus("Failed to delete S3 object", HttpStatusCode.InternalServerError);
-      }
-
     }
     // Validate and parse recommendedColors
     let parsedColors = {};
@@ -40,7 +43,8 @@ export const addBackground = async (
         parsedColors = JSON.parse(recommendedColors);
       } catch (parseError: any) {
         throw new ErrorWithStatus(
-          `Invalid recommendedColors format: ${parseError?.message}`, HttpStatusCode.BadRequest
+          `Invalid recommendedColors format: ${parseError?.message}`,
+          HttpStatusCode.BadRequest,
         );
       }
     }
@@ -60,7 +64,7 @@ export const addBackground = async (
     if (error instanceof ErrorWithStatus) {
       if (error.message.startsWith("Background with name")) {
         console.error(`Duplicate entry: ${error.message}`);
-        throw new ErrorWithStatus(error?.message, error.status)
+        throw new ErrorWithStatus(error?.message, error.status);
       }
 
       if (error.message.startsWith("Invalid recommendedColors")) {
@@ -116,7 +120,7 @@ export const updateBackground = async (
   name: string,
   newImgUrl: string,
   newImgKey: string,
-  recommendedColors: string
+  recommendedColors: string,
 ) => {
   try {
     // Get existing background
@@ -127,14 +131,14 @@ export const updateBackground = async (
     if (!existingBackground) {
       throw new ErrorWithStatus(
         "Background not found",
-        HttpStatusCode.NotFound
+        HttpStatusCode.NotFound,
       );
     }
 
     // Delete existing image from S3
     const isDeleted = await deleteS3Object(
       ENV_variables.AWS_S3_BUCKET,
-      existingBackground.imgKey
+      existingBackground.imgKey,
     );
 
     if (!!isDeleted) {
@@ -145,14 +149,14 @@ export const updateBackground = async (
           name: name,
           imageUrl: newImgUrl,
           imgKey: newImgKey,
-          recommendedColors: recommendedColors
+          recommendedColors: recommendedColors,
         },
       });
       return updatedBackground;
     } else {
       throw new ErrorWithStatus(
         "Failed to delete old image from S3",
-        HttpStatusCode.InternalServerError
+        HttpStatusCode.InternalServerError,
       );
     }
   } catch (error) {
