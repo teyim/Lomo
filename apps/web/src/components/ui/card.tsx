@@ -30,6 +30,7 @@ function Card({ title, imageUrl, id }: CardProps) {
           width={400}
           height={400}
           className="rounded-xl"
+          priority
         />
       </div>
       <div>

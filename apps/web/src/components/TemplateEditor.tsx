@@ -4,7 +4,7 @@ import * as fabric from "fabric";
 import { Template, TemplateAsset } from "@/types";
 import { getFontWeight } from "@/lib/utils";
 import { useFabricCanvas } from "@/hooks";
-import { canvasScaleFactor } from "@/constants";
+import { canvasDimensions, canvasScaleFactor } from "@/constants";
 import SettingsPanel from "./panels/SettingsPanel";
 import LayerPanel from "./panels/LayerPanel";
 import ToolbarPanel from "./panels/ToolbarPanel";
@@ -13,6 +13,7 @@ import emptystateImage from "public/illustrations/abstract-art-6.svg";
 import Image from "next/image";
 import { Background } from "@repo/db";
 import { useBlogThumbnailStore } from "@/store";
+import { getScaledCanvasDimensions } from "@/lib/utils";
 
 import { useShallow } from "zustand/shallow";
 
@@ -51,6 +52,7 @@ export default function TemplateEditor({
   templateData,
   backgroundData,
 }: TemplateEditorProps) {
+
   const { selectedBackground } = useBlogThumbnailStore(
     useShallow((state) => ({ selectedBackground: state.selectedBackground })),
   );
@@ -64,11 +66,13 @@ export default function TemplateEditor({
 
   const { canvasRef, addScaledText, exportCanvas, setBackgroundImage } =
     useFabricCanvas({
-      originalWidth: 1000,
-      originalHeight: 420,
-      scaleFactor: 1,
+      originalWidth: canvasDimensions.width,
+      originalHeight: canvasDimensions.height,
+      scaleFactor: canvasScaleFactor,
       backgroundColor: "white",
     });
+
+
 
   // Initialize canvas with template assets
   useEffect(() => {
@@ -200,9 +204,9 @@ export default function TemplateEditor({
           />
 
           <div className={styles.mainContent}>
-            {/* <div className={styles.sidePanel}>
-              <LayerPanel assets={canvasRef.current?.getObjects() as any} />
-            </div> */}
+            {selectedBackground && <div className={styles.sidePanel}>
+              <LayerPanel backgroundName={selectedBackground.name} />
+            </div>}
 
             <div className={styles.canvasWrapper}>
               <canvas
@@ -210,7 +214,7 @@ export default function TemplateEditor({
                 ref={canvasRef as unknown as React.LegacyRef<HTMLCanvasElement>}
               />
               {!selectedBackground && (
-                <div className=" absolute z-10 flex-col justify-center  ">
+                <div className="absolute z-10 flex-col justify-center  ">
                   <div>
                     <Image
                       src={emptystateImage}

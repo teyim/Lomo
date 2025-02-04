@@ -6,6 +6,17 @@ interface BlogThumbnailState {
   addSelectedBackground: (background: ThumbnailBackgroundData) => void;
 }
 
+interface CanvasAssetsState {
+  assets: any[],
+  setAssets: (assets: any) => void
+}
+
+export const useCanvasAssetsStore = create<CanvasAssetsState>()((set, get) => ({
+  assets: [],
+  setAssets: (assets: any) => set({ assets: assets })
+}))
+
+
 export const useBlogThumbnailStore = create<BlogThumbnailState>()(
   (set, get) => ({
     selectedBackground: null,
