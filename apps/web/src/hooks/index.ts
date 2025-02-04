@@ -87,7 +87,7 @@ export const useFabricCanvas = ({
 
     fabric.FabricImage.fromURL(imageUrl).then((img) => {
       (tempBackgroundImage = img),
-        tempBackgroundImage.scale(0.5),
+        tempBackgroundImage.scale(scaleFactor),
         (tempBackgroundImage.selectable = false),
         (tempBackgroundImage.evented = false),
         (tempBackgroundImage.top = 0),

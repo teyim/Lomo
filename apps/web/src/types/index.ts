@@ -49,3 +49,12 @@ export type CanvasOptions = {
   scaleFactor: number;
   backgroundColor: string;
 };
+
+export type ThumbnailBackgroundData = {
+  name: string,
+  imageUrl: string,
+  recommendedColors: {
+    primary: string,
+    secondary: string
+  }
+}
