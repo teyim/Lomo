@@ -8,3 +8,8 @@ export const thumbnailCategories = [
 ];
 
 export const canvasScaleFactor = 0.7;
+
+export const canvasDimensions = {
+  width: 1000 * canvasScaleFactor,
+  height: 420 * canvasScaleFactor
+}

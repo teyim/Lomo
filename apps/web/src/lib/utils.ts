@@ -1,3 +1,4 @@
+import { canvasAspectRatio, canvasDimensions } from "@/constants";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -20,3 +21,6 @@ export function getFontWeight(fontWeightName: string): number {
 
   return fontWeightMap[fontWeightName.toLowerCase()] || 400;
 }
+
+
+

@@ -9,13 +9,12 @@ export function rgbToHex(r: number, g: number, b: number): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
-export const deleteS3Object = async (
-  bucket: string,
-  key: string,
-) => {
+export const deleteS3Object = async (bucket: string, key: string) => {
   try {
-    const data = await s3.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
-    return data
+    const data = await s3.send(
+      new DeleteObjectCommand({ Bucket: bucket, Key: key }),
+    );
+    return data;
   } catch (error) {
     console.error("Error deleting S3 object:", error);
     throw new Error("Failed to delete S3 object");

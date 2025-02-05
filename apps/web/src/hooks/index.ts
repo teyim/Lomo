@@ -5,6 +5,9 @@ import * as fabric from "fabric";
 import { getFontWeight } from "@/lib/utils";
 import backgroundImage from "public/images/Frame6.jpg";
 import { Scale } from "lucide-react";
+import { useCanvasAssetsStore } from "@/store";
+import React from "react";
+import { useShallow } from "zustand/shallow";
 
 export const useDynamicNavigation = () => {
   const router = useRouter();
@@ -23,6 +26,11 @@ export const useFabricCanvas = ({
   scaleFactor,
   backgroundColor,
 }: CanvasOptions) => {
+
+  const { setAssets } = useCanvasAssetsStore(
+    useShallow((state) => ({ setAssets: state.setAssets })),
+  );
+
   const canvasRef = useRef<fabric.Canvas | null>(null);
 
   // Initialize canvas
@@ -34,6 +42,7 @@ export const useFabricCanvas = ({
       height: originalHeight,
       preserveObjectStacking: true,
       renderOnAddRemove: false,
+      backgroundColor: "red"
     });
 
     canvasRef.current = canvas;
@@ -54,8 +63,9 @@ export const useFabricCanvas = ({
     height: number,
     color: string,
     fontFamily: string,
-    fontWeight: string,
+    fontWeight: number,
   ) => {
+    console.log(color)
     if (!canvasRef.current) return;
 
     const scaledText = new fabric.Textbox(text, {
@@ -66,8 +76,8 @@ export const useFabricCanvas = ({
       height: height,
       fill: color,
       fontFamily: fontFamily,
-      fontWeight: getFontWeight(fontWeight),
-      textAlign: "center",
+      fontWeight: fontWeight,
+      textAlign: "left",
     });
 
     canvasRef.current.add(scaledText);
@@ -75,28 +85,27 @@ export const useFabricCanvas = ({
   };
 
   // Function to set background image
-  const setBackgroundImage = (imageUrl: string) => {
+  const setBackgroundImage = async (imageUrl: string) => {
     console.log("ran-background add");
     if (!canvasRef.current) return;
 
-    let tempBackgroundImage: fabric.FabricImage<
-      Partial<fabric.ImageProps>,
-      fabric.SerializedImageProps,
-      fabric.ObjectEvents
-    >;
+    const addBackgroundImage = async () => {
+      const img = await fabric.FabricImage.fromURL(imageUrl);
+      img.scale(scaleFactor);
+      img.selectable = false;
+      img.evented = false;
+      img.top = 0;
+      img.left = 0;
 
-    fabric.FabricImage.fromURL(imageUrl).then((img) => {
-      (tempBackgroundImage = img),
-        tempBackgroundImage.scale(0.5),
-        (tempBackgroundImage.selectable = false),
-        (tempBackgroundImage.evented = false),
-        (tempBackgroundImage.top = 0),
-        (tempBackgroundImage.left = 0);
-
-      canvasRef?.current?.add(tempBackgroundImage);
-      canvasRef?.current?.sendObjectToBack(tempBackgroundImage);
+      canvasRef?.current?.add(img);
+      canvasRef?.current?.sendObjectToBack(img);
       canvasRef?.current?.renderAll();
-    });
+    };
+
+    // Execute the asynchronous function immediately
+    await addBackgroundImage();
+
+    setAssets(canvasRef?.current?.getObjects())
   };
 
   // Function to export canvas at original scale

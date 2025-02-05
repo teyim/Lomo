@@ -1,17 +1,20 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as fabric from "fabric";
-import { Template, TemplateAsset } from "@/types";
-import { getFontWeight } from "@/lib/utils";
+import { LayoutWithElements } from "@/types";
 import { useFabricCanvas } from "@/hooks";
-import { canvasScaleFactor } from "@/constants";
-import SettingsPanel from "./panels/SettingsPanel";
+import { canvasDimensions, canvasScaleFactor } from "@/constants";
 import LayerPanel from "./panels/LayerPanel";
 import ToolbarPanel from "./panels/ToolbarPanel";
-import backgroundImage from "public/images/Frame6.jpg";
+import emptystateImage from "public/illustrations/abstract-art-6.svg";
+import Image from "next/image";
+import { Background, LayoutElementType } from "@repo/db";
+import { useBlogThumbnailStore } from "@/store";
+import { useShallow } from "zustand/shallow";
 
 type TemplateEditorProps = {
-  templateData: Template;
+  layoutData: LayoutWithElements[];
+  backgroundData: Background[];
 };
 
 // Default state for selected element
@@ -40,7 +43,25 @@ const styles = {
   desktopContent: " w-full h-full",
 } as const;
 
-export default function TemplateEditor({ templateData }: TemplateEditorProps) {
+export default function TemplateEditor({
+  layoutData,
+  backgroundData,
+}: TemplateEditorProps) {
+
+
+  const { selectedBackground, selectedLayout } = useBlogThumbnailStore(
+    useShallow((state) => ({ selectedBackground: state.selectedBackground, selectedLayout: state.selectedLayout })),
+  );
+
+  const getRecommendedColorByAssetType = (assetType: LayoutElementType) => {
+    return assetType === "HEADING"
+      ? selectedBackground?.recommendedColors?.primary ?? "#000000"
+      : assetType === "SUBHEADING"
+        ? selectedBackground?.recommendedColors?.secondary ?? "#000000"
+        : "#000000";
+  };
+
+
   const [selectedElement, setSelectedElement] = useState<fabric.Text | null>(
     null,
   );
@@ -50,10 +71,10 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
 
   const { canvasRef, addScaledText, exportCanvas, setBackgroundImage } =
     useFabricCanvas({
-      originalWidth: templateData.width,
-      originalHeight: templateData.height,
+      originalWidth: canvasDimensions.width,
+      originalHeight: canvasDimensions.height,
       scaleFactor: canvasScaleFactor,
-      backgroundColor: templateData.backgroundColor,
+      backgroundColor: "white",
     });
 
   // Initialize canvas with template assets
@@ -61,50 +82,61 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
     console.log("useEeffect ran");
     if (!canvasRef.current) return;
 
-    templateData.assets.forEach((asset) => {
-      addScaledText(
-        asset.defaultText,
-        asset.fontSize,
-        asset.positionX,
-        asset.positionY,
-        asset.width,
-        asset.height,
-        asset.color,
-        asset.fontFamily,
-        asset.fontWeight,
-      );
-    });
+    // Clear existing objects before adding new ones
+    canvasRef.current.clear();
+
+    if (selectedLayout) {
+
+      selectedLayout?.elements.forEach((asset) => {
+        const elementColor = getRecommendedColorByAssetType(asset.type)
+        addScaledText(
+          asset.label,
+          (asset.fontSize ?? 0) * canvasScaleFactor,
+          (asset.positionX ?? 0) * canvasScaleFactor,
+          (asset.positionY ?? 0) * canvasScaleFactor,
+          (asset.width ?? 0) * canvasScaleFactor,
+          (asset.height ?? 0) * canvasScaleFactor,
+          elementColor,
+          asset.fontFamily ?? "Arial",
+          Number(asset.fontWeight) ?? 100
+        );
+      });
+    }
+
 
     // Check if a background image is already set
-    if (!canvasRef.current.backgroundImage) {
-      setBackgroundImage(backgroundImage.src);
+    if (selectedBackground?.imageUrl) {
+      setBackgroundImage(selectedBackground.imageUrl);
     }
-  }, []);
 
-  // Setup canvas event listeners
-  useEffect(() => {
-    if (!canvasRef.current) return;
+    // Refresh canvas after adding elements
+    canvasRef.current.renderAll();
+  }, [selectedBackground, selectedLayout]);
 
-    const eventHandlers = {
-      "selection:created": (event: fabric.IEvent) =>
-        handleObjectSelection(event.selected?.[0] as fabric.Text),
-      "selection:updated": (event: fabric.IEvent) =>
-        handleObjectSelection(event.selected?.[0] as fabric.Text),
-      "selection:cleared": clearSelectedElement,
-    };
+  // // Setup canvas event listeners
+  // useEffect(() => {
+  //   if (!canvasRef.current) return;
 
-    // Attach event listeners
-    Object.entries(eventHandlers).forEach(([event, handler]) => {
-      canvasRef.current?.on(event as keyof fabric.CanvasEvents, handler);
-    });
+  //   const eventHandlers = {
+  //     "selection:created": (event: fabric.IEvent) =>
+  //       handleObjectSelection(event.selected?.[0] as fabric.Text),
+  //     "selection:updated": (event: fabric.IEvent) =>
+  //       handleObjectSelection(event.selected?.[0] as fabric.Text),
+  //     "selection:cleared": clearSelectedElement,
+  //   };
 
-    // Cleanup event listeners
-    return () => {
-      Object.entries(eventHandlers).forEach(([event, handler]) => {
-        canvasRef.current?.off(event as keyof fabric.CanvasEvents, handler);
-      });
-    };
-  }, [canvasRef]);
+  //   // Attach event listeners
+  //   Object.entries(eventHandlers).forEach(([event, handler]) => {
+  //     canvasRef.current?.on(event as keyof fabric.CanvasEvents, handler);
+  //   });
+
+  //   // Cleanup event listeners
+  //   return () => {
+  //     Object.entries(eventHandlers).forEach(([event, handler]) => {
+  //       canvasRef.current?.off(event as keyof fabric.CanvasEvents, handler);
+  //     });
+  //   };
+  // }, [canvasRef]);
 
   const handleObjectSelection = (object: fabric.Text) => {
     if (!object || object.type !== "textbox") {
@@ -165,7 +197,7 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
     if (canvasRef.current) {
       const dataURL = exportCanvas();
       const link = document.createElement("a");
-      link.download = `${templateData.name}.png`;
+      link.download = `hello.png`;
       link.href = dataURL || "";
       link.click();
     }
@@ -177,7 +209,7 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
       <div className={styles.desktopContent}>
         <div className={styles.container}>
           <p className={styles.header}>
-            <span className="font-bold">Template</span>: {templateData.name}
+            <span className="font-bold">Template</span>: Create Thumbnail
           </p>
 
           <ToolbarPanel
@@ -185,26 +217,43 @@ export default function TemplateEditor({ templateData }: TemplateEditorProps) {
             onZoomOut={handleZoomOut}
             onExport={handleExport}
             zoomLevel={zoomLevel}
+            backgroundData={backgroundData}
+            layoutData={layoutData}
           />
 
           <div className={styles.mainContent}>
-            <div className={styles.sidePanel}>
-              <LayerPanel assets={canvasRef.current?.getObjects() as any} />
-            </div>
+            {selectedBackground && <div className={styles.sidePanel}>
+              <LayerPanel backgroundName={selectedBackground.name} />
+            </div>}
 
             <div className={styles.canvasWrapper}>
               <canvas
                 id="canvas"
                 ref={canvasRef as unknown as React.LegacyRef<HTMLCanvasElement>}
               />
+              {!selectedBackground && (
+                <div className="absolute z-10 flex-col justify-center  ">
+                  <div>
+                    <Image
+                      src={emptystateImage}
+                      alt="empty state"
+                      className="w-[300px] h-[300px] mx-auto"
+                    />
+                  </div>
+                  <h5>
+                    Please select a background and a corresponding layout to
+                    start or Select a Template
+                  </h5>
+                </div>
+              )}
             </div>
 
-            <div className={styles.sidePanel}>
+            {/* <div className={styles.sidePanel}>
               <SettingsPanel
                 selectedElement={selectedElementUpdates}
                 onUpdate={handleElementUpdate}
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

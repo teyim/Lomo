@@ -1,6 +1,11 @@
 import { NextFunction, Response, Request } from "express";
 import { ErrorWithStatus } from "../../types";
-import { addBackgroundService, deleteBackgroundService, getAllBackgroundsService, updateBackgroundService } from "./service";
+import {
+  addBackgroundService,
+  deleteBackgroundService,
+  getAllBackgroundsService,
+  updateBackgroundService,
+} from "./service";
 import { HttpStatusCode } from "../../constants";
 
 // add new background controller
@@ -32,7 +37,6 @@ export const addBackgroundController = async (
     return next(error);
   }
 };
-
 
 export const deleteBackgroundController = async (
   req: Request,
@@ -66,8 +70,6 @@ export const getAllBackgroundsController = async (
   }
 };
 
-
-
 export const updateBackgroundController = async (
   req: Request,
   res: Response,
@@ -98,7 +100,7 @@ export const updateBackgroundController = async (
       name,
       newImgUrl,
       newImgKey,
-      recommendedColors
+      recommendedColors,
     );
 
     res.status(200).json({ success: true, updatedBackground });
