@@ -63,8 +63,9 @@ export const useFabricCanvas = ({
     height: number,
     color: string,
     fontFamily: string,
-    fontWeight: string,
+    fontWeight: number,
   ) => {
+    console.log(color)
     if (!canvasRef.current) return;
 
     const scaledText = new fabric.Textbox(text, {
@@ -75,8 +76,8 @@ export const useFabricCanvas = ({
       height: height,
       fill: color,
       fontFamily: fontFamily,
-      fontWeight: getFontWeight(fontWeight),
-      textAlign: "center",
+      fontWeight: fontWeight,
+      textAlign: "left",
     });
 
     canvasRef.current.add(scaledText);

@@ -9,7 +9,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/context/ModalContext";
 import { Background } from "@repo/db";
-import BackgroundCards from "../sections/backgroundcard";
+import BackgroundCards from "../sections/modulesCards";
+import { LayoutWithElements } from "@/types";
+import ModulesCards from "../sections/modulesCards";
 
 interface ToolbarPanelProps {
   onZoomIn: () => void;
@@ -17,6 +19,7 @@ interface ToolbarPanelProps {
   onExport: () => void;
   zoomLevel: number;
   backgroundData: Background[];
+  layoutData: LayoutWithElements[]
 }
 
 export default function ToolbarPanel({
@@ -25,6 +28,7 @@ export default function ToolbarPanel({
   onExport,
   zoomLevel,
   backgroundData,
+  layoutData
 }: ToolbarPanelProps) {
   const { hideModal, showModal } = useModal();
 
@@ -36,12 +40,14 @@ export default function ToolbarPanel({
           size="icon"
           className="h-8"
           onClick={() =>
-            showModal(<BackgroundCards backgrounds={backgroundData} />)
+            showModal(<ModulesCards backgrounds={backgroundData} />)
           }
         >
           <FileImage className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="h-8 w-8">
+        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() =>
+          showModal(<ModulesCards layouts={layoutData} />)
+        }>
           <LayoutGrid className="h-4 w-4" />
         </Button>
         <Button

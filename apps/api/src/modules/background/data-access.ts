@@ -41,6 +41,7 @@ export const addBackground = async (
     if (recommendedColors) {
       try {
         parsedColors = JSON.parse(recommendedColors);
+        console.log(parsedColors)
       } catch (parseError: any) {
         throw new ErrorWithStatus(
           `Invalid recommendedColors format: ${parseError?.message}`,
@@ -49,14 +50,14 @@ export const addBackground = async (
       }
     }
 
+
+
     const background = await prisma.background.create({
       data: {
         name: name,
         imageUrl: imgUrl,
         imgKey: imgkey,
-        recommendedColors: recommendedColors
-          ? JSON.parse(recommendedColors)
-          : {},
+        recommendedColors: parsedColors
       },
     });
     return background;
@@ -141,6 +142,20 @@ export const updateBackground = async (
       existingBackground.imgKey,
     );
 
+    // Validate and parse recommendedColors
+    let parsedColors = {};
+    if (recommendedColors) {
+      try {
+        parsedColors = JSON.parse(recommendedColors);
+        console.log(parsedColors)
+      } catch (parseError: any) {
+        throw new ErrorWithStatus(
+          `Invalid recommendedColors format: ${parseError?.message}`,
+          HttpStatusCode.BadRequest,
+        );
+      }
+    }
+
     if (!!isDeleted) {
       // Update background with new image
       const updatedBackground = await prisma.background.update({
@@ -149,7 +164,7 @@ export const updateBackground = async (
           name: name,
           imageUrl: newImgUrl,
           imgKey: newImgKey,
-          recommendedColors: recommendedColors,
+          recommendedColors: parsedColors,
         },
       });
       return updatedBackground;

@@ -1,6 +1,6 @@
 import { baseUrl } from "@/constants";
-import { Template } from "@/types";
-import { Background } from "@repo/db";
+import { LayoutWithElements, Template } from "@/types";
+import { Background, Layout } from "@repo/db";
 
 // get all blogpost templates
 export const getBlogPostTemplates = async () => {
@@ -31,13 +31,29 @@ export const getBlogPostById = async (id: string) => {
 };
 
 export const getAllBackgrounds = async () => {
-  const response = await fetch(`${baseUrl}/backgrounds`);
+  const response = await fetch(`${baseUrl}/backgrounds`,{
+    cache: "no-cache",
+  });
 
   if (!response.ok) {
     throw new Error(`${response.status}`);
   }
 
   const data: { success: boolean; backgrounds: Background[] } =
+    await response.json();
+  return data;
+};
+
+export const getAllLayouts = async () => {
+  const response = await fetch(`${baseUrl}/layouts`,{
+    cache: "no-cache",
+  });
+
+  if (!response.ok) {
+    throw new Error(`${response.status}`);
+  }
+
+  const data: { success: boolean; layouts: LayoutWithElements[] } =
     await response.json();
   return data;
 };

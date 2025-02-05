@@ -1,24 +1,19 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as fabric from "fabric";
-import { Template, TemplateAsset } from "@/types";
-import { getFontWeight } from "@/lib/utils";
+import { LayoutWithElements } from "@/types";
 import { useFabricCanvas } from "@/hooks";
 import { canvasDimensions, canvasScaleFactor } from "@/constants";
-import SettingsPanel from "./panels/SettingsPanel";
 import LayerPanel from "./panels/LayerPanel";
 import ToolbarPanel from "./panels/ToolbarPanel";
-import backgroundImage from "public/images/Frame6.jpg";
 import emptystateImage from "public/illustrations/abstract-art-6.svg";
 import Image from "next/image";
-import { Background } from "@repo/db";
+import { Background, LayoutElementType } from "@repo/db";
 import { useBlogThumbnailStore } from "@/store";
-import { getScaledCanvasDimensions } from "@/lib/utils";
-
 import { useShallow } from "zustand/shallow";
 
 type TemplateEditorProps = {
-  templateData: Template | [];
+  layoutData: LayoutWithElements[];
   backgroundData: Background[];
 };
 
@@ -49,13 +44,23 @@ const styles = {
 } as const;
 
 export default function TemplateEditor({
-  templateData,
+  layoutData,
   backgroundData,
 }: TemplateEditorProps) {
 
-  const { selectedBackground } = useBlogThumbnailStore(
-    useShallow((state) => ({ selectedBackground: state.selectedBackground })),
+
+  const { selectedBackground, selectedLayout } = useBlogThumbnailStore(
+    useShallow((state) => ({ selectedBackground: state.selectedBackground, selectedLayout: state.selectedLayout })),
   );
+
+  const getRecommendedColorByAssetType = (assetType: LayoutElementType) => {
+    return assetType === "HEADING"
+      ? selectedBackground?.recommendedColors?.primary ?? "#000000"
+      : assetType === "SUBHEADING"
+        ? selectedBackground?.recommendedColors?.secondary ?? "#000000"
+        : "#000000";
+  };
+
 
   const [selectedElement, setSelectedElement] = useState<fabric.Text | null>(
     null,
@@ -72,29 +77,41 @@ export default function TemplateEditor({
       backgroundColor: "white",
     });
 
-
-
   // Initialize canvas with template assets
   useEffect(() => {
     console.log("useEeffect ran");
     if (!canvasRef.current) return;
 
-    // addScaledText(
-    //   defaultElementState.text,
-    //   defaultElementState.fontSize,
-    //   defaultElementState.left,
-    //   defaultElementState.top,
-    //   defaultElementState.width,
-    //   defaultElementState.height, "",
-    //   defaultElementState.fontFamily,
-    //   "bold"
-    // );
+    // Clear existing objects before adding new ones
+    canvasRef.current.clear();
+
+    if (selectedLayout) {
+
+      selectedLayout?.elements.forEach((asset) => {
+        const elementColor = getRecommendedColorByAssetType(asset.type)
+        addScaledText(
+          asset.label,
+          (asset.fontSize ?? 0) * canvasScaleFactor,
+          (asset.positionX ?? 0) * canvasScaleFactor,
+          (asset.positionY ?? 0) * canvasScaleFactor,
+          (asset.width ?? 0) * canvasScaleFactor,
+          (asset.height ?? 0) * canvasScaleFactor,
+          elementColor,
+          asset.fontFamily ?? "Arial",
+          Number(asset.fontWeight) ?? 100
+        );
+      });
+    }
+
 
     // Check if a background image is already set
     if (selectedBackground?.imageUrl) {
       setBackgroundImage(selectedBackground.imageUrl);
     }
-  }, [selectedBackground]);
+
+    // Refresh canvas after adding elements
+    canvasRef.current.renderAll();
+  }, [selectedBackground, selectedLayout]);
 
   // // Setup canvas event listeners
   // useEffect(() => {
@@ -180,7 +197,7 @@ export default function TemplateEditor({
     if (canvasRef.current) {
       const dataURL = exportCanvas();
       const link = document.createElement("a");
-      link.download = `${templateData.name}.png`;
+      link.download = `hello.png`;
       link.href = dataURL || "";
       link.click();
     }
@@ -201,6 +218,7 @@ export default function TemplateEditor({
             onExport={handleExport}
             zoomLevel={zoomLevel}
             backgroundData={backgroundData}
+            layoutData={layoutData}
           />
 
           <div className={styles.mainContent}>

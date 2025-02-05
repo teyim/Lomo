@@ -1,6 +1,10 @@
+import { Layout, LayoutElement } from "@repo/db";
+
 export enum DynamicRoutes {
   Template = "/template",
 }
+
+export type module = "background" | "layout"
 
 export type RouteParams = {
   slug: string;
@@ -58,3 +62,14 @@ export type ThumbnailBackgroundData = {
     secondary: string;
   };
 };
+
+export type LayoutCardProps={
+    name:string,
+    imageUrl:string,
+    elements:LayoutElement[]
+}
+
+export interface LayoutWithElements extends Layout {
+  elements: LayoutElement[]
+}
+
