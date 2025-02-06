@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import * as fabric from "fabric";
-import { LayoutWithElements } from "@/types";
+import { LayoutWithElements, SupportedFonts } from "@/types";
 import { useFabricCanvas } from "@/hooks";
 import { canvasDimensions, canvasScaleFactor } from "@/constants";
 import LayerPanel from "./panels/LayerPanel";
@@ -11,6 +11,8 @@ import Image from "next/image";
 import { Background, LayoutElementType } from "@repo/db";
 import { useBlogThumbnailStore } from "@/store";
 import { useShallow } from "zustand/shallow";
+import { lexend } from "@/app/layout";
+import { getOptimisedFontFamilyByName } from "@/lib/utils";
 
 type TemplateEditorProps = {
   layoutData: LayoutWithElements[];
@@ -97,7 +99,7 @@ export default function TemplateEditor({
           (asset.width ?? 0) * canvasScaleFactor,
           (asset.height ?? 0) * canvasScaleFactor,
           elementColor,
-          asset.fontFamily ?? "Arial",
+          getOptimisedFontFamilyByName(asset?.fontFamily?.toLocaleLowerCase() as SupportedFonts),
           Number(asset.fontWeight) ?? 100
         );
       });

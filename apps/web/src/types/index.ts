@@ -4,6 +4,8 @@ export enum DynamicRoutes {
   Template = "/template",
 }
 
+export type SupportedFonts = "lekton" | "lexend"
+
 export type module = "background" | "layout"
 
 export type RouteParams = {
