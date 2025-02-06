@@ -225,7 +225,7 @@ export default function TemplateEditor({
 
           <div className={styles.mainContent}>
             {selectedBackground && <div className={styles.sidePanel}>
-              <LayerPanel backgroundName={selectedBackground.name} />
+              <LayerPanel background={selectedBackground} layoutElements={selectedLayout?.elements ?? []} />
             </div>}
 
             <div className={styles.canvasWrapper}>

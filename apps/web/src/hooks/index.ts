@@ -2,12 +2,8 @@ import { useRouter } from "next/navigation";
 import { CanvasOptions, RouteParams } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
-import { getFontWeight } from "@/lib/utils";
-import backgroundImage from "public/images/Frame6.jpg";
-import { Scale } from "lucide-react";
-import { useCanvasAssetsStore } from "@/store";
-import React from "react";
 import { useShallow } from "zustand/shallow";
+
 
 export const useDynamicNavigation = () => {
   const router = useRouter();
@@ -27,9 +23,6 @@ export const useFabricCanvas = ({
   backgroundColor,
 }: CanvasOptions) => {
 
-  const { setAssets } = useCanvasAssetsStore(
-    useShallow((state) => ({ setAssets: state.setAssets })),
-  );
 
   const canvasRef = useRef<fabric.Canvas | null>(null);
 
@@ -105,7 +98,6 @@ export const useFabricCanvas = ({
     // Execute the asynchronous function immediately
     await addBackgroundImage();
 
-    setAssets(canvasRef?.current?.getObjects())
   };
 
   // Function to export canvas at original scale

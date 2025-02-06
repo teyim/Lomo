@@ -1,18 +1,18 @@
+import { LayoutElement } from ".prisma/client";
 import { Separator } from "@/components/ui/separator";
-import { useCanvasAssetsStore } from "@/store";
-import { FileImage } from "lucide-react";
+import { useBlogThumbnailStore } from "@/store";
+import { LayoutCardProps, ThumbnailBackgroundData } from "@/types";
+import { FileImage, FileText, Type } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 interface LayerPanelProps {
-  backgroundName: string
+  background: ThumbnailBackgroundData | null
+  layoutElements: LayoutElement[] | null
 }
 
-export default function LayerPanel({ backgroundName }: LayerPanelProps) {
+export default function LayerPanel({ background, layoutElements }: LayerPanelProps) {
 
-  const { assets } = useCanvasAssetsStore(
-    useShallow((state) => ({ assets: state.assets })),
-  );
 
   const baseLayerItemStyles =
     "flex items-center justify-between p-2 rounded cursor-pointer hover:bg-gray-100/20";
@@ -27,10 +27,19 @@ export default function LayerPanel({ backgroundName }: LayerPanelProps) {
             <FileImage className="h-4 w-4" />
           </span>
                 <span className="text-xs font-medium truncate w-[130px]">
-            {backgroundName}
+            {background?.name}
                 </span>
-              </div>
-
+        </div>
+        {layoutElements?.map((layoutElement) => (
+          <div className="flex items-center space-x-2" key={layoutElement.id}>
+            <span>
+              <Type className="h-4 w-4" />
+            </span>
+            <span className="text-xs font-medium truncate w-[130px]">
+              {layoutElement?.type.toLocaleLowerCase()}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
