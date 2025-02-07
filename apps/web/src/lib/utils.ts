@@ -63,5 +63,10 @@ export const calculateScaleFactor = (screenWidth: number) => {
 
 };
 
+export const constainsSubstring = (substring: string, mainString: string) => {
+  const regex = new RegExp(substring, 'i');
+  return regex.test(mainString);
+}
+
 
 

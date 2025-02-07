@@ -1,10 +1,11 @@
+import { supportedFonts } from "@/constants";
 import { Layout, LayoutElement } from "@repo/db";
 
 export enum DynamicRoutes {
   Template = "/template",
 }
 
-export type SupportedFonts = "lekton" | "lexend"
+export type SupportedFonts = typeof supportedFonts[number]
 
 export type module = "background" | "layout"
 

@@ -13,6 +13,7 @@ import { useBlogThumbnailStore } from "@/store";
 import { useShallow } from "zustand/shallow";
 import { lexend } from "@/app/layout";
 import { calculateScaleFactor, getOptimisedFontFamilyByName, scaleCanvas } from "@/lib/utils";
+import SettingsPanel from "./panels/SettingsPanel";
 
 type TemplateEditorProps = {
   layoutData: LayoutWithElements[];
@@ -265,12 +266,12 @@ export default function TemplateEditor({
               )}
             </div>
 
-            {/* <div className={styles.sidePanel}>
+            <div className={styles.sidePanel}>
               <SettingsPanel
                 selectedElement={selectedElementUpdates}
                 onUpdate={handleElementUpdate}
               />
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

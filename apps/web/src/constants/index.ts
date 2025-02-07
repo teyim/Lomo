@@ -14,3 +14,5 @@ export const canvasDimensions = {
   width: 1000,
   height: 420
 }
+
+export const supportedFonts = ["lekton", "lexend"] as const;
