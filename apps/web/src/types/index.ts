@@ -1,8 +1,11 @@
+import { supportedFonts } from "@/constants";
 import { Layout, LayoutElement } from "@repo/db";
 
 export enum DynamicRoutes {
   Template = "/template",
 }
+
+export type SupportedFonts = typeof supportedFonts[number]
 
 export type module = "background" | "layout"
 
@@ -50,7 +53,7 @@ export interface Template {
 export type CanvasOptions = {
   originalWidth: number;
   originalHeight: number;
-  scaleFactor: number;
+  scaleFactor: { canvas: number, text: number };
   backgroundColor: string;
 };
 

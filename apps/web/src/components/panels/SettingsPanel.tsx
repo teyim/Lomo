@@ -14,25 +14,20 @@ import {
   Type,
   Palette,
 } from "lucide-react";
+import { supportedFonts } from "@/constants";
+import { constainsSubstring } from "@/lib/utils";
 
 interface SettingsPanelProps {
   selectedElement: any | null;
   onUpdate: (updates: Partial<SettingsPanelProps["selectedElement"]>) => void;
 }
 
-const fontOptions = [
-  "Arial",
-  "Times New Roman",
-  "Helvetica",
-  "Inter",
-  "Roboto",
-  "Lexend",
-];
 
 export default function SettingsPanel({
   selectedElement,
   onUpdate,
 }: SettingsPanelProps) {
+  console.log(selectedElement)
   if (selectedElement?.width === 0 || selectedElement?.height === 0) {
     return (
       <div className=" z-50 absolute right-2  md:bottom-2 lg:top-[35%] w-[230px] h-[250px] bg-slate-800 backdrop-blur-sm rounded-xl shadow-lg text-white ring-1 ring-white">
@@ -71,14 +66,16 @@ export default function SettingsPanel({
             <span className="text-xs font-medium">Font</span>
           </div>
           <Select
-            value={selectedElement.fontFamily}
+            value={supportedFonts.find((ele) =>
+              constainsSubstring(ele, selectedElement?.fontFamily)
+            )}
             onValueChange={(value) => onUpdate({ fontFamily: value })}
           >
             <SelectTrigger className="h-6 w-24 bg-slate-700 border-slate-600 text-xs">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="">
-              {fontOptions.map((font) => (
+              {supportedFonts.map((font) => (
                 <SelectItem key={font} value={font} className="text-xs">
                   {font}
                 </SelectItem>

@@ -2,12 +2,10 @@ import { useRouter } from "next/navigation";
 import { CanvasOptions, RouteParams } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
-import { getFontWeight } from "@/lib/utils";
-import backgroundImage from "public/images/Frame6.jpg";
-import { Scale } from "lucide-react";
-import { useCanvasAssetsStore } from "@/store";
-import React from "react";
-import { useShallow } from "zustand/shallow";
+import { scaleCanvas } from "@/lib/utils";
+import { defaultScaleFactor } from "@/constants";
+
+
 
 export const useDynamicNavigation = () => {
   const router = useRouter();
@@ -27,9 +25,6 @@ export const useFabricCanvas = ({
   backgroundColor,
 }: CanvasOptions) => {
 
-  const { setAssets } = useCanvasAssetsStore(
-    useShallow((state) => ({ setAssets: state.setAssets })),
-  );
 
   const canvasRef = useRef<fabric.Canvas | null>(null);
 
@@ -90,12 +85,15 @@ export const useFabricCanvas = ({
     if (!canvasRef.current) return;
 
     const addBackgroundImage = async () => {
-      const img = await fabric.FabricImage.fromURL(imageUrl);
-      img.scale(scaleFactor);
+      const img = await fabric.FabricImage.fromURL(imageUrl, {
+        crossOrigin: 'anonymous', // Enable CORS
+      });
+      img.scale(scaleFactor.canvas);
       img.selectable = false;
       img.evented = false;
       img.top = 0;
       img.left = 0;
+
 
       canvasRef?.current?.add(img);
       canvasRef?.current?.sendObjectToBack(img);
@@ -105,21 +103,25 @@ export const useFabricCanvas = ({
     // Execute the asynchronous function immediately
     await addBackgroundImage();
 
-    setAssets(canvasRef?.current?.getObjects())
   };
 
   // Function to export canvas at original scale
   const exportCanvas = (): string | null => {
     if (!canvasRef.current) return null;
 
+    scaleCanvas(canvasRef.current, defaultScaleFactor);
+
     const dataURL = canvasRef.current.toDataURL({
       format: "jpeg",
       quality: 1,
-      multiplier: 1,
+      multiplier: 2,
     });
 
+
+    scaleCanvas(canvasRef.current, scaleFactor);
+
     return dataURL;
-  };
+  }
 
   return { canvasRef, addScaledText, exportCanvas, setBackgroundImage };
 };
