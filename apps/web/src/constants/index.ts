@@ -7,9 +7,10 @@ export const thumbnailCategories = [
   { label: "Vox", value: "vox" },
 ];
 
-export const canvasScaleFactor = 0.7;
+export const defaultScaleFactor = { canvas: 1, text: 1 }
+
 
 export const canvasDimensions = {
-  width: 1000 * canvasScaleFactor,
-  height: 420 * canvasScaleFactor
+  width: 1000,
+  height: 420
 }

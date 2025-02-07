@@ -52,7 +52,7 @@ export interface Template {
 export type CanvasOptions = {
   originalWidth: number;
   originalHeight: number;
-  scaleFactor: number;
+  scaleFactor: { canvas: number, text: number };
   backgroundColor: string;
 };
 

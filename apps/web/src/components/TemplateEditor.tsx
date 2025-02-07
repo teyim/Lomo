@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import * as fabric from "fabric";
 import { LayoutWithElements, SupportedFonts } from "@/types";
 import { useFabricCanvas } from "@/hooks";
-import { canvasDimensions, canvasScaleFactor } from "@/constants";
+import { canvasDimensions } from "@/constants";
 import LayerPanel from "./panels/LayerPanel";
 import ToolbarPanel from "./panels/ToolbarPanel";
 import emptystateImage from "public/illustrations/abstract-art-6.svg";
@@ -12,7 +12,7 @@ import { Background, LayoutElementType } from "@repo/db";
 import { useBlogThumbnailStore } from "@/store";
 import { useShallow } from "zustand/shallow";
 import { lexend } from "@/app/layout";
-import { getOptimisedFontFamilyByName } from "@/lib/utils";
+import { calculateScaleFactor, getOptimisedFontFamilyByName, scaleCanvas } from "@/lib/utils";
 
 type TemplateEditorProps = {
   layoutData: LayoutWithElements[];
@@ -50,9 +50,8 @@ export default function TemplateEditor({
   backgroundData,
 }: TemplateEditorProps) {
 
-
-  const { selectedBackground, selectedLayout } = useBlogThumbnailStore(
-    useShallow((state) => ({ selectedBackground: state.selectedBackground, selectedLayout: state.selectedLayout })),
+  const { selectedBackground, selectedLayout, scaleFactor, setScaleFactor } = useBlogThumbnailStore(
+    useShallow((state) => ({ selectedBackground: state.selectedBackground, selectedLayout: state.selectedLayout, scaleFactor: state.scaleFactor, setScaleFactor: state.setScaleFactor })),
   );
 
   const getRecommendedColorByAssetType = (assetType: LayoutElementType) => {
@@ -63,7 +62,6 @@ export default function TemplateEditor({
         : "#000000";
   };
 
-
   const [selectedElement, setSelectedElement] = useState<fabric.Text | null>(
     null,
   );
@@ -73,15 +71,15 @@ export default function TemplateEditor({
 
   const { canvasRef, addScaledText, exportCanvas, setBackgroundImage } =
     useFabricCanvas({
-      originalWidth: canvasDimensions.width,
-      originalHeight: canvasDimensions.height,
-      scaleFactor: canvasScaleFactor,
+      originalWidth: canvasDimensions.width * scaleFactor.canvas,
+      originalHeight: canvasDimensions.height * scaleFactor.canvas,
+      scaleFactor: scaleFactor,
       backgroundColor: "white",
     });
 
   // Initialize canvas with template assets
   useEffect(() => {
-    console.log("useEeffect ran");
+
     if (!canvasRef.current) return;
 
     // Clear existing objects before adding new ones
@@ -93,11 +91,11 @@ export default function TemplateEditor({
         const elementColor = getRecommendedColorByAssetType(asset.type)
         addScaledText(
           asset.label,
-          (asset.fontSize ?? 0) * canvasScaleFactor,
-          (asset.positionX ?? 0) * canvasScaleFactor,
-          (asset.positionY ?? 0) * canvasScaleFactor,
-          (asset.width ?? 0) * canvasScaleFactor,
-          (asset.height ?? 0) * canvasScaleFactor,
+          (asset.fontSize ?? 0) * scaleFactor.text,
+          (asset.positionX ?? 0) * scaleFactor.text,
+          (asset.positionY ?? 0) * scaleFactor.text,
+          (asset.width ?? 0) * scaleFactor.text,
+          (asset.height ?? 0) * scaleFactor.text,
           elementColor,
           getOptimisedFontFamilyByName(asset?.fontFamily?.toLocaleLowerCase() as SupportedFonts),
           Number(asset.fontWeight) ?? 100
@@ -111,34 +109,51 @@ export default function TemplateEditor({
       setBackgroundImage(selectedBackground.imageUrl);
     }
 
-    // Refresh canvas after adding elements
-    canvasRef.current.renderAll();
-  }, [selectedBackground, selectedLayout]);
+    scaleCanvas(canvasRef.current, scaleFactor)
 
-  // // Setup canvas event listeners
-  // useEffect(() => {
-  //   if (!canvasRef.current) return;
+  }, [selectedBackground, selectedLayout, scaleFactor]);
 
-  //   const eventHandlers = {
-  //     "selection:created": (event: fabric.IEvent) =>
-  //       handleObjectSelection(event.selected?.[0] as fabric.Text),
-  //     "selection:updated": (event: fabric.IEvent) =>
-  //       handleObjectSelection(event.selected?.[0] as fabric.Text),
-  //     "selection:cleared": clearSelectedElement,
-  //   };
+  console.log(scaleFactor)
+  // Update scale factor on window resize
+  useLayoutEffect(() => {
+    console.log(window.innerWidth)
+    const handleResize = () => {
+      const newScaleFactor = calculateScaleFactor(window.innerWidth);
+      setScaleFactor(newScaleFactor);
+    }
+    handleResize();
 
-  //   // Attach event listeners
-  //   Object.entries(eventHandlers).forEach(([event, handler]) => {
-  //     canvasRef.current?.on(event as keyof fabric.CanvasEvents, handler);
-  //   });
+    window.addEventListener('resize', handleResize);
 
-  //   // Cleanup event listeners
-  //   return () => {
-  //     Object.entries(eventHandlers).forEach(([event, handler]) => {
-  //       canvasRef.current?.off(event as keyof fabric.CanvasEvents, handler);
-  //     });
-  //   };
-  // }, [canvasRef]);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // Setup canvas event listeners
+  useEffect(() => {
+    if (!canvasRef.current) return;
+
+    const eventHandlers = {
+      "selection:created": (event: fabric.IEvent) =>
+        handleObjectSelection(event.selected?.[0] as fabric.Text),
+      "selection:updated": (event: fabric.IEvent) =>
+        handleObjectSelection(event.selected?.[0] as fabric.Text),
+      "selection:cleared": clearSelectedElement,
+    };
+
+    // Attach event listeners
+    Object.entries(eventHandlers).forEach(([event, handler]) => {
+      canvasRef.current?.on(event as keyof fabric.CanvasEvents, handler);
+    });
+
+    // Cleanup event listeners
+    return () => {
+      Object.entries(eventHandlers).forEach(([event, handler]) => {
+        canvasRef.current?.off(event as keyof fabric.CanvasEvents, handler);
+      });
+    };
+  }, [canvasRef]);
 
   const handleObjectSelection = (object: fabric.Text) => {
     if (!object || object.type !== "textbox") {
@@ -199,7 +214,7 @@ export default function TemplateEditor({
     if (canvasRef.current) {
       const dataURL = exportCanvas();
       const link = document.createElement("a");
-      link.download = `hello.png`;
+      link.download = `${selectedBackground?.name}.png`;
       link.href = dataURL || "";
       link.click();
     }

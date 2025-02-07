@@ -1,7 +1,13 @@
+import { defaultScaleFactor } from "@/constants";
 import { LayoutCardProps, LayoutWithElements, ThumbnailBackgroundData } from "@/types";
 import { create } from "zustand";
 
 interface BlogThumbnailState {
+  scaleFactor: {
+    canvas: number,
+    text: number,
+  },
+  setScaleFactor: (value: { canvas: number, text: number }) => void,
   selectedBackground: ThumbnailBackgroundData | null;
   selectedLayout:LayoutCardProps|null;
   addSelectedLayout: (layout: LayoutCardProps) => void;
@@ -10,6 +16,10 @@ interface BlogThumbnailState {
 
 export const useBlogThumbnailStore = create<BlogThumbnailState>()(
   (set, get) => ({
+    scaleFactor: {
+      ...defaultScaleFactor
+    },
+    setScaleFactor: (value: { canvas: number, text: number }) => set({ scaleFactor: value }),
     selectedBackground: null,
     selectedLayout:null,
     addSelectedLayout: (layout: LayoutCardProps) =>
