@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
 import { scaleCanvas } from "@/lib/utils";
 import { defaultScaleFactor } from "@/constants";
+import { LayoutElement } from "@repo/db";
 
 
 
@@ -105,6 +106,28 @@ export const useFabricCanvas = ({
 
   };
 
+  const addImage = async (data: LayoutElement) => {
+    if (!canvasRef.current) return;
+
+    const addCanvasImage = async () => {
+      const img = await fabric.FabricImage.fromURL(data?.imageUrl ?? "", {
+        crossOrigin: 'anonymous', // Enable CORS
+      });
+
+      img.scaleToHeight(data.height ?? 0)
+      img.scaleToWidth(data.width ?? 0)
+      img.left = data.positionX
+      img.top = data.positionY
+
+
+      canvasRef?.current?.add(img);
+      canvasRef?.current?.renderAll();
+    };
+
+    // Execute the asynchronous function immediately
+    await addCanvasImage();
+  }
+
   // Function to export canvas at original scale
   const exportCanvas = (): string | null => {
     if (!canvasRef.current) return null;
@@ -123,5 +146,5 @@ export const useFabricCanvas = ({
     return dataURL;
   }
 
-  return { canvasRef, addScaledText, exportCanvas, setBackgroundImage };
+  return { canvasRef, addScaledText, exportCanvas, setBackgroundImage, addImage };
 };

@@ -1,4 +1,4 @@
-import { supportedFonts } from "@/constants";
+import { defaultImageElementState, defaultTextElementState, supportedFonts } from "@/constants";
 import { Layout, LayoutElement } from "@repo/db";
 
 export enum DynamicRoutes {
@@ -14,7 +14,8 @@ export type RouteParams = {
   dynamicRouteName: DynamicRoutes;
 };
 
-type TemplateContentType = "TEXT" | "IMAGE";
+export type LayoutElementType = "HEADING" | "SUBHEADING" | "IMAGE";
+
 type TemplateTextFontWeight =
   | "Bold"
   | "Regular"
@@ -25,7 +26,7 @@ type TemplateTextFontWeight =
 export interface TemplateAsset {
   id: string;
   templateId: string;
-  type: TemplateContentType; // Add other types if needed
+  type: LayoutElementType; // Add other types if needed
   label: string;
   url?: string | null;
   positionX: number;
@@ -75,4 +76,7 @@ export type LayoutCardProps={
 export interface LayoutWithElements extends Layout {
   elements: LayoutElement[]
 }
+
+
+export type SelectedElement = typeof defaultTextElementState | typeof defaultImageElementState
 

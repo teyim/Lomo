@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import * as fabric from "fabric";
-import { LayoutWithElements, SupportedFonts } from "@/types";
+import { LayoutWithElements, SelectedElement, SupportedFonts } from "@/types";
 import { useFabricCanvas } from "@/hooks";
-import { canvasDimensions } from "@/constants";
+import { canvasDimensions, defaultImageElementState, defaultTextElementState } from "@/constants";
 import LayerPanel from "./panels/LayerPanel";
 import ToolbarPanel from "./panels/ToolbarPanel";
 import emptystateImage from "public/illustrations/abstract-art-6.svg";
@@ -18,20 +18,6 @@ import SettingsPanel from "./panels/SettingsPanel";
 type TemplateEditorProps = {
   layoutData: LayoutWithElements[];
   backgroundData: Background[];
-};
-
-// Default state for selected element
-const defaultElementState = {
-  text: "",
-  fontFamily: "",
-  fontSize: 0,
-  fill: "",
-  textAlign: "center",
-  width: 0,
-  height: 0,
-  left: 0,
-  top: 0,
-  fontWeight: 100,
 };
 
 // Common styles
@@ -63,14 +49,11 @@ export default function TemplateEditor({
         : "#000000";
   };
 
-  const [selectedElement, setSelectedElement] = useState<fabric.Text | null>(
-    null,
-  );
-  const [selectedElementUpdates, setSelectedElementUpdates] =
-    useState(defaultElementState);
+  const [selectedElement, setSelectedElement] = useState<fabric.Object | null>(null);
+  const [selectedElementUpdates, setSelectedElementUpdates] = useState<SelectedElement>(defaultTextElementState)
   const [zoomLevel, setZoomLevel] = useState(1);
 
-  const { canvasRef, addScaledText, exportCanvas, setBackgroundImage } =
+  const { canvasRef, addScaledText, exportCanvas, setBackgroundImage, addImage } =
     useFabricCanvas({
       originalWidth: canvasDimensions.width * scaleFactor.canvas,
       originalHeight: canvasDimensions.height * scaleFactor.canvas,
@@ -89,18 +72,24 @@ export default function TemplateEditor({
     if (selectedLayout) {
 
       selectedLayout?.elements.forEach((asset) => {
-        const elementColor = getRecommendedColorByAssetType(asset.type)
-        addScaledText(
-          asset.label,
-          (asset.fontSize ?? 0) * scaleFactor.text,
-          (asset.positionX ?? 0) * scaleFactor.text,
-          (asset.positionY ?? 0) * scaleFactor.text,
-          (asset.width ?? 0) * scaleFactor.text,
-          (asset.height ?? 0) * scaleFactor.text,
-          elementColor,
-          getOptimisedFontFamilyByName(asset?.fontFamily?.toLocaleLowerCase() as SupportedFonts),
-          Number(asset.fontWeight) ?? 100
-        );
+        if (asset.type != "IMAGE") {
+          const elementColor = getRecommendedColorByAssetType(asset.type)
+          addScaledText(
+            asset.label,
+            (asset.fontSize ?? 0) * scaleFactor.text,
+            (asset.positionX ?? 0) * scaleFactor.text,
+            (asset.positionY ?? 0) * scaleFactor.text,
+            (asset.width ?? 0) * scaleFactor.text,
+            (asset.height ?? 0) * scaleFactor.text,
+            elementColor,
+            getOptimisedFontFamilyByName(asset?.fontFamily?.toLocaleLowerCase() as SupportedFonts),
+            Number(asset.fontWeight) ?? 100
+          );
+        }
+        else {
+          addImage(asset)
+        }
+
       });
     }
 
@@ -110,9 +99,8 @@ export default function TemplateEditor({
       setBackgroundImage(selectedBackground.imageUrl);
     }
 
-    scaleCanvas(canvasRef.current, scaleFactor)
 
-  }, [selectedBackground, selectedLayout, scaleFactor]);
+  }, [selectedBackground, selectedLayout]);
 
   console.log(scaleFactor)
   // Update scale factor on window resize
@@ -137,18 +125,16 @@ export default function TemplateEditor({
 
     const eventHandlers = {
       "selection:created": (event: fabric.IEvent) =>
-        handleObjectSelection(event.selected?.[0] as fabric.Text),
+        handleObjectSelection(event.selected?.[0] as fabric.Object),
       "selection:updated": (event: fabric.IEvent) =>
-        handleObjectSelection(event.selected?.[0] as fabric.Text),
+        handleObjectSelection(event.selected?.[0] as fabric.Object),
       "selection:cleared": clearSelectedElement,
     };
 
-    // Attach event listeners
     Object.entries(eventHandlers).forEach(([event, handler]) => {
       canvasRef.current?.on(event as keyof fabric.CanvasEvents, handler);
     });
 
-    // Cleanup event listeners
     return () => {
       Object.entries(eventHandlers).forEach(([event, handler]) => {
         canvasRef.current?.off(event as keyof fabric.CanvasEvents, handler);
@@ -156,31 +142,52 @@ export default function TemplateEditor({
     };
   }, [canvasRef]);
 
-  const handleObjectSelection = (object: fabric.Text) => {
-    if (!object || object.type !== "textbox") {
+  const handleObjectSelection = (object: fabric.Object | null) => {
+    if (!object) {
       clearSelectedElement();
       return;
     }
 
     setSelectedElement(object);
 
-    setSelectedElementUpdates({
-      text: object.text || "",
-      fontFamily: object.fontFamily || "",
-      fontSize: object.fontSize || 0,
-      fill: object.fill?.toString() || "",
-      textAlign: object.textAlign || "center",
-      width: object.width || 0,
-      height: object.height || 0,
-      left: object.left || 0,
-      top: object.top || 0,
-      fontWeight: object.fontWeight as number,
-    });
+    if (object.type === "textbox") {
+      const textObject = object as fabric.Textbox;
+      setSelectedElementUpdates({
+        ...defaultTextElementState,
+        text: textObject.text || "",
+        fontFamily: textObject.fontFamily || "",
+        fontSize: textObject.fontSize || 0,
+        fill: textObject.fill?.toString() || "",
+        textAlign: textObject.textAlign || "center",
+        width: textObject.width || 0,
+        height: textObject.height || 0,
+        left: textObject.left || 0,
+        top: textObject.top || 0,
+        fontWeight: textObject.fontWeight as number,
+      });
+    } else if (object.type === "image") {
+
+      const imageObject = object as fabric.Image;
+      setSelectedElementUpdates({
+        ...defaultImageElementState,
+        src: imageObject.getSrc() || "",
+        width: imageObject.width || 0,
+        height: imageObject.height || 0,
+        left: imageObject.left || 0,
+        top: imageObject.top || 0,
+        scaleX: imageObject.scaleX || 1,
+        scaleY: imageObject.scaleY || 1,
+        angle: imageObject.angle || 0,
+        opacity: imageObject.opacity || 1,
+        flipX: imageObject.flipX || false,
+        flipY: imageObject.flipY || false,
+      });
+    }
   };
 
   const clearSelectedElement = () => {
     setSelectedElement(null);
-    setSelectedElementUpdates(defaultElementState);
+    setSelectedElementUpdates(defaultTextElementState);
   };
 
   const handleElementUpdate = (
