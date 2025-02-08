@@ -18,6 +18,10 @@ export const ErrorMessages = {
     DELETE_WITH_TEMPLATES: "Cannot delete background with associated templates",
     INVALID_IMAGE: "Invalid image file format",
   },
+  ASSET_CATEGORY: {
+    EXIST: (name: string) => `asset category with name "${name}" already exist`,
+    NOT_FOUND: "asset category not found",
+  },
   DATABASE: {
     CONNECTION: "Database connection error",
     OPERATION: "Database operation failed",

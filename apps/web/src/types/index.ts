@@ -1,20 +1,25 @@
-import { supportedFonts } from "@/constants";
+import {
+  defaultImageElementState,
+  defaultTextElementState,
+  supportedFonts,
+} from "@/constants";
 import { Layout, LayoutElement } from "@repo/db";
 
 export enum DynamicRoutes {
   Template = "/template",
 }
 
-export type SupportedFonts = typeof supportedFonts[number]
+export type SupportedFonts = (typeof supportedFonts)[number];
 
-export type module = "background" | "layout"
+export type module = "background" | "layout";
 
 export type RouteParams = {
   slug: string;
   dynamicRouteName: DynamicRoutes;
 };
 
-type TemplateContentType = "TEXT" | "IMAGE";
+export type LayoutElementType = "HEADING" | "SUBHEADING" | "IMAGE";
+
 type TemplateTextFontWeight =
   | "Bold"
   | "Regular"
@@ -25,7 +30,7 @@ type TemplateTextFontWeight =
 export interface TemplateAsset {
   id: string;
   templateId: string;
-  type: TemplateContentType; // Add other types if needed
+  type: LayoutElementType; // Add other types if needed
   label: string;
   url?: string | null;
   positionX: number;
@@ -53,7 +58,7 @@ export interface Template {
 export type CanvasOptions = {
   originalWidth: number;
   originalHeight: number;
-  scaleFactor: { canvas: number, text: number };
+  scaleFactor: { canvas: number; text: number };
   backgroundColor: string;
 };
 
@@ -66,13 +71,16 @@ export type ThumbnailBackgroundData = {
   };
 };
 
-export type LayoutCardProps={
-    name:string,
-    imageUrl:string,
-    elements:LayoutElement[]
-}
+export type LayoutCardProps = {
+  name: string;
+  imageUrl: string;
+  elements: LayoutElement[];
+};
 
 export interface LayoutWithElements extends Layout {
-  elements: LayoutElement[]
+  elements: LayoutElement[];
 }
 
+export type SelectedElement =
+  | typeof defaultTextElementState
+  | typeof defaultImageElementState;

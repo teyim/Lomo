@@ -7,13 +7,14 @@ import React, { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 interface LayerPanelProps {
-  background: ThumbnailBackgroundData | null
-  layoutElements: LayoutElement[] | null
+  background: ThumbnailBackgroundData | null;
+  layoutElements: LayoutElement[] | null;
 }
 
-export default function LayerPanel({ background, layoutElements }: LayerPanelProps) {
-
-
+export default function LayerPanel({
+  background,
+  layoutElements,
+}: LayerPanelProps) {
   const baseLayerItemStyles =
     "flex items-center justify-between p-2 rounded cursor-pointer hover:bg-gray-100/20";
 
@@ -26,9 +27,9 @@ export default function LayerPanel({ background, layoutElements }: LayerPanelPro
           <span>
             <FileImage className="h-4 w-4" />
           </span>
-                <span className="text-xs font-medium truncate w-[130px]">
+          <span className="text-xs font-medium truncate w-[130px]">
             {background?.name}
-                </span>
+          </span>
         </div>
         {layoutElements?.map((layoutElement) => (
           <div className="flex items-center space-x-2" key={layoutElement.id}>

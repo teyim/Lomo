@@ -1,12 +1,12 @@
 import React from "react";
-import { getAllBackgrounds, getAllLayouts} from "@/services";
+import { getAllBackgrounds, getAllLayouts } from "@/services";
 import TemplateEditor from "@/components/TemplateEditor";
 import Image from "next/image";
 import abstractArt from "public/illustrations/abstract-art-6.svg";
 
 async function Page() {
   const backgroundData = await getAllBackgrounds();
-  const layoutData = await getAllLayouts()
+  const layoutData = await getAllLayouts();
 
   return (
     <div className="relative min-h-screen w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] p-4">

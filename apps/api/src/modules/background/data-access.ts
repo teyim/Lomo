@@ -41,7 +41,7 @@ export const addBackground = async (
     if (recommendedColors) {
       try {
         parsedColors = JSON.parse(recommendedColors);
-        console.log(parsedColors)
+        console.log(parsedColors);
       } catch (parseError: any) {
         throw new ErrorWithStatus(
           `Invalid recommendedColors format: ${parseError?.message}`,
@@ -50,14 +50,12 @@ export const addBackground = async (
       }
     }
 
-
-
     const background = await prisma.background.create({
       data: {
         name: name,
         imageUrl: imgUrl,
         imgKey: imgkey,
-        recommendedColors: parsedColors
+        recommendedColors: parsedColors,
       },
     });
     return background;
@@ -147,7 +145,7 @@ export const updateBackground = async (
     if (recommendedColors) {
       try {
         parsedColors = JSON.parse(recommendedColors);
-        console.log(parsedColors)
+        console.log(parsedColors);
       } catch (parseError: any) {
         throw new ErrorWithStatus(
           `Invalid recommendedColors format: ${parseError?.message}`,

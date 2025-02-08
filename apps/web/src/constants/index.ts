@@ -7,12 +7,41 @@ export const thumbnailCategories = [
   { label: "Vox", value: "vox" },
 ];
 
-export const defaultScaleFactor = { canvas: 1, text: 1 }
-
+export const defaultScaleFactor = { canvas: 1, text: 1 };
 
 export const canvasDimensions = {
   width: 1000,
-  height: 420
-}
+  height: 420,
+};
 
 export const supportedFonts = ["lekton", "lexend"] as const;
+
+// Default state for selected element
+export const defaultTextElementState = {
+  type: "textbox",
+  text: "",
+  fontFamily: "",
+  fontSize: 0,
+  fill: "",
+  textAlign: "center",
+  width: 0,
+  height: 0,
+  left: 0,
+  top: 0,
+  fontWeight: 100,
+};
+
+export const defaultImageElementState = {
+  type: "image",
+  src: "",
+  width: 0,
+  height: 0,
+  left: 0,
+  top: 0,
+  scaleX: 1,
+  scaleY: 1,
+  angle: 0,
+  opacity: 1,
+  flipX: false,
+  flipY: false,
+};

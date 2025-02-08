@@ -1,17 +1,17 @@
-import React from 'react';
-import Image from 'next/image';
-import { useModal } from '@/context/ModalContext';
-import { useBlogThumbnailStore } from '@/store';
-import { useShallow } from 'zustand/shallow';
-import { ThumbnailBackgroundData } from '@/types';
-import { LayoutElement } from '@repo/db';
+import React from "react";
+import Image from "next/image";
+import { useModal } from "@/context/ModalContext";
+import { useBlogThumbnailStore } from "@/store";
+import { useShallow } from "zustand/shallow";
+import { ThumbnailBackgroundData } from "@/types";
+import { LayoutElement } from "@repo/db";
 
 interface ModulesCardProps {
-  cardType: 'layout' | 'background';
+  cardType: "layout" | "background";
   name: string;
   imageUrl: string;
   elements?: LayoutElement[];
-  recommendedColors?: ThumbnailBackgroundData['recommendedColors'];
+  recommendedColors?: ThumbnailBackgroundData["recommendedColors"];
 }
 
 function ModulesCard({
@@ -19,38 +19,35 @@ function ModulesCard({
   name,
   imageUrl,
   elements,
-  recommendedColors
+  recommendedColors,
 }: ModulesCardProps) {
   const { hideModal } = useModal();
-  const {
-    addBackground,
-    addLayout,
-    selectedBackground
-  } = useBlogThumbnailStore(
-    useShallow((state) => ({
-      addBackground: state.addSelectedBackground,
-      addLayout: state.addSelectedLayout,
-      selectedBackground: state.selectedBackground
-    }))
-  );
+  const { addBackground, addLayout, selectedBackground } =
+    useBlogThumbnailStore(
+      useShallow((state) => ({
+        addBackground: state.addSelectedBackground,
+        addLayout: state.addSelectedLayout,
+        selectedBackground: state.selectedBackground,
+      })),
+    );
 
   const handleSelect = () => {
-    if (cardType === 'background' && recommendedColors) {
+    if (cardType === "background" && recommendedColors) {
       addBackground({
         name,
         imageUrl,
-        recommendedColors
+        recommendedColors,
       });
     }
-    if (cardType === 'layout' && elements) {
+    if (cardType === "layout" && elements) {
       if (!selectedBackground) {
-        alert("Please select a background before adding layout")
-        return
+        alert("Please select a background before adding layout");
+        return;
       }
       addLayout({
         name,
         imageUrl,
-        elements
+        elements,
       });
     }
     hideModal();
