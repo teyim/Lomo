@@ -29,7 +29,6 @@ model Background {
   imgKey            String    
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
-  templates       Template[]
   recommendedColors  Json 
 }
 
@@ -68,17 +67,22 @@ model Layout {
   previewimage      String           // layout preview
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
-  templates         Template[]
 }
 
-model Template {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  name          String        // Template name
-  backgroundId  String        @db.ObjectId
-  background    Background    @relation(fields: [backgroundId], references: [id])
-  layoutId      String        @db.ObjectId
-  layout        Layout        @relation(fields: [layoutId], references: [id])
-  isDefault     Boolean       @default(false) // Flags this as the default template
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+model AssetCategory {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String  @unique
+  assets    Asset[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Asset {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  url         String   // URL to the asset file
+  categoryId  String   @db.ObjectId
+  category    AssetCategory @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
