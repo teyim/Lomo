@@ -19,7 +19,7 @@ interface ToolbarPanelProps {
   onExport: () => void;
   zoomLevel: number;
   backgroundData: Background[];
-  layoutData: LayoutWithElements[]
+  layoutData: LayoutWithElements[];
 }
 
 export default function ToolbarPanel({
@@ -28,7 +28,7 @@ export default function ToolbarPanel({
   onExport,
   zoomLevel,
   backgroundData,
-  layoutData
+  layoutData,
 }: ToolbarPanelProps) {
   const { hideModal, showModal } = useModal();
 
@@ -45,9 +45,12 @@ export default function ToolbarPanel({
         >
           <FileImage className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() =>
-          showModal(<ModulesCards layouts={layoutData} />)
-        }>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={() => showModal(<ModulesCards layouts={layoutData} />)}
+        >
           <LayoutGrid className="h-4 w-4" />
         </Button>
         <Button

@@ -31,7 +31,7 @@ export const getBlogPostById = async (id: string) => {
 };
 
 export const getAllBackgrounds = async () => {
-  const response = await fetch(`${baseUrl}/backgrounds`,{
+  const response = await fetch(`${baseUrl}/backgrounds`, {
     cache: "no-cache",
   });
 
@@ -45,7 +45,7 @@ export const getAllBackgrounds = async () => {
 };
 
 export const getAllLayouts = async () => {
-  const response = await fetch(`${baseUrl}/layouts`,{
+  const response = await fetch(`${baseUrl}/layouts`, {
     cache: "no-cache",
   });
 

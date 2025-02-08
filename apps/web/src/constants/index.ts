@@ -7,13 +7,12 @@ export const thumbnailCategories = [
   { label: "Vox", value: "vox" },
 ];
 
-export const defaultScaleFactor = { canvas: 1, text: 1 }
-
+export const defaultScaleFactor = { canvas: 1, text: 1 };
 
 export const canvasDimensions = {
   width: 1000,
-  height: 420
-}
+  height: 420,
+};
 
 export const supportedFonts = ["lekton", "lexend"] as const;
 

@@ -6,8 +6,6 @@ import { scaleCanvas } from "@/lib/utils";
 import { defaultScaleFactor } from "@/constants";
 import { LayoutElement } from "@repo/db";
 
-
-
 export const useDynamicNavigation = () => {
   const router = useRouter();
 
@@ -25,8 +23,6 @@ export const useFabricCanvas = ({
   scaleFactor,
   backgroundColor,
 }: CanvasOptions) => {
-
-
   const canvasRef = useRef<fabric.Canvas | null>(null);
 
   // Initialize canvas
@@ -38,7 +34,7 @@ export const useFabricCanvas = ({
       height: originalHeight,
       preserveObjectStacking: true,
       renderOnAddRemove: false,
-      backgroundColor: "red"
+      backgroundColor: "red",
     });
 
     canvasRef.current = canvas;
@@ -61,7 +57,7 @@ export const useFabricCanvas = ({
     fontFamily: string,
     fontWeight: number,
   ) => {
-    console.log(color)
+    console.log(color);
     if (!canvasRef.current) return;
 
     const scaledText = new fabric.Textbox(text, {
@@ -87,14 +83,13 @@ export const useFabricCanvas = ({
 
     const addBackgroundImage = async () => {
       const img = await fabric.FabricImage.fromURL(imageUrl, {
-        crossOrigin: 'anonymous', // Enable CORS
+        crossOrigin: "anonymous", // Enable CORS
       });
       img.scale(scaleFactor.canvas);
       img.selectable = false;
       img.evented = false;
       img.top = 0;
       img.left = 0;
-
 
       canvasRef?.current?.add(img);
       canvasRef?.current?.sendObjectToBack(img);
@@ -103,7 +98,6 @@ export const useFabricCanvas = ({
 
     // Execute the asynchronous function immediately
     await addBackgroundImage();
-
   };
 
   const addImage = async (data: LayoutElement) => {
@@ -111,14 +105,13 @@ export const useFabricCanvas = ({
 
     const addCanvasImage = async () => {
       const img = await fabric.FabricImage.fromURL(data?.imageUrl ?? "", {
-        crossOrigin: 'anonymous', // Enable CORS
+        crossOrigin: "anonymous", // Enable CORS
       });
 
-      img.scaleToHeight(data.height ?? 0)
-      img.scaleToWidth(data.width ?? 0)
-      img.left = data.positionX
-      img.top = data.positionY
-
+      img.scaleToHeight(data.height ?? 0);
+      img.scaleToWidth(data.width ?? 0);
+      img.left = data.positionX;
+      img.top = data.positionY;
 
       canvasRef?.current?.add(img);
       canvasRef?.current?.renderAll();
@@ -126,7 +119,7 @@ export const useFabricCanvas = ({
 
     // Execute the asynchronous function immediately
     await addCanvasImage();
-  }
+  };
 
   // Function to export canvas at original scale
   const exportCanvas = (): string | null => {
@@ -140,11 +133,16 @@ export const useFabricCanvas = ({
       multiplier: 2,
     });
 
-
     scaleCanvas(canvasRef.current, scaleFactor);
 
     return dataURL;
-  }
+  };
 
-  return { canvasRef, addScaledText, exportCanvas, setBackgroundImage, addImage };
+  return {
+    canvasRef,
+    addScaledText,
+    exportCanvas,
+    setBackgroundImage,
+    addImage,
+  };
 };

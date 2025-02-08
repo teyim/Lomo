@@ -31,8 +31,11 @@ export default function SettingsPanel({
   selectedElement,
   onUpdate,
 }: SettingsPanelProps) {
-
-  if (!selectedElement || selectedElement.width === 0 || selectedElement.height === 0) {
+  if (
+    !selectedElement ||
+    selectedElement.width === 0 ||
+    selectedElement.height === 0
+  ) {
     return (
       <div className="z-50 absolute right-2 md:bottom-2 lg:top-[35%] w-[230px] h-[250px] bg-slate-800 backdrop-blur-sm rounded-xl shadow-lg text-white ring-1 ring-white">
         <h6 className="p-3 font-mono text-sm font-bold">Settings</h6>
@@ -73,7 +76,7 @@ export default function SettingsPanel({
               </div>
               <Select
                 value={supportedFonts.find((ele) =>
-                  constainsSubstring(ele, selectedElement?.fontFamily)
+                  constainsSubstring(ele, selectedElement?.fontFamily),
                 )}
                 onValueChange={(value) => onUpdate({ fontFamily: value })}
               >
@@ -158,7 +161,9 @@ export default function SettingsPanel({
           <>
             {/* Image Source */}
             <div className="flex items-center justify-between p-2 hover:bg-gray-100/20 rounded">
-              <Button className="w-full bg-white text-gray-900 hover:bg-white">Add image</Button>
+              <Button className="w-full bg-white text-gray-900 hover:bg-white">
+                Add image
+              </Button>
             </div>
 
             {/* Image Scale */}
@@ -174,7 +179,9 @@ export default function SettingsPanel({
                   className="h-6 w-12 bg-slate-700 border-slate-600 text-xs p-0 px-1"
                   placeholder="X"
                 />
-                <span><XIcon size={15} /></span>
+                <span>
+                  <XIcon size={15} />
+                </span>
                 <Input
                   type="number"
                   value={selectedElement.height}

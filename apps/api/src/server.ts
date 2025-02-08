@@ -2,8 +2,8 @@ import { json, urlencoded } from "body-parser";
 import express, { type Express } from "express";
 import templateController from "./modules/template/handler";
 import backgroundHandler from "./modules/background/handler";
-import layoutHandler from "./modules/layout/handler"
-import assetCategoryHandler from "./modules/assetCategory/handler"
+import layoutHandler from "./modules/layout/handler";
+import assetCategoryHandler from "./modules/assetCategory/handler";
 import morgan from "morgan";
 import cors from "cors";
 import { errorHandler } from "./middleware/errorHandler";

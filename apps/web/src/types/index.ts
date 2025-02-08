@@ -1,13 +1,17 @@
-import { defaultImageElementState, defaultTextElementState, supportedFonts } from "@/constants";
+import {
+  defaultImageElementState,
+  defaultTextElementState,
+  supportedFonts,
+} from "@/constants";
 import { Layout, LayoutElement } from "@repo/db";
 
 export enum DynamicRoutes {
   Template = "/template",
 }
 
-export type SupportedFonts = typeof supportedFonts[number]
+export type SupportedFonts = (typeof supportedFonts)[number];
 
-export type module = "background" | "layout"
+export type module = "background" | "layout";
 
 export type RouteParams = {
   slug: string;
@@ -54,7 +58,7 @@ export interface Template {
 export type CanvasOptions = {
   originalWidth: number;
   originalHeight: number;
-  scaleFactor: { canvas: number, text: number };
+  scaleFactor: { canvas: number; text: number };
   backgroundColor: string;
 };
 
@@ -67,16 +71,16 @@ export type ThumbnailBackgroundData = {
   };
 };
 
-export type LayoutCardProps={
-    name:string,
-    imageUrl:string,
-    elements:LayoutElement[]
-}
+export type LayoutCardProps = {
+  name: string;
+  imageUrl: string;
+  elements: LayoutElement[];
+};
 
 export interface LayoutWithElements extends Layout {
-  elements: LayoutElement[]
+  elements: LayoutElement[];
 }
 
-
-export type SelectedElement = typeof defaultTextElementState | typeof defaultImageElementState
-
+export type SelectedElement =
+  | typeof defaultTextElementState
+  | typeof defaultImageElementState;

@@ -3,7 +3,11 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import * as fabric from "fabric";
 import { LayoutWithElements, SelectedElement, SupportedFonts } from "@/types";
 import { useFabricCanvas } from "@/hooks";
-import { canvasDimensions, defaultImageElementState, defaultTextElementState } from "@/constants";
+import {
+  canvasDimensions,
+  defaultImageElementState,
+  defaultTextElementState,
+} from "@/constants";
 import LayerPanel from "./panels/LayerPanel";
 import ToolbarPanel from "./panels/ToolbarPanel";
 import emptystateImage from "public/illustrations/abstract-art-6.svg";
@@ -12,7 +16,11 @@ import { Background, LayoutElementType } from "@repo/db";
 import { useBlogThumbnailStore } from "@/store";
 import { useShallow } from "zustand/shallow";
 import { lexend } from "@/app/layout";
-import { calculateScaleFactor, getOptimisedFontFamilyByName, scaleCanvas } from "@/lib/utils";
+import {
+  calculateScaleFactor,
+  getOptimisedFontFamilyByName,
+  scaleCanvas,
+} from "@/lib/utils";
 import SettingsPanel from "./panels/SettingsPanel";
 
 type TemplateEditorProps = {
@@ -36,44 +44,55 @@ export default function TemplateEditor({
   layoutData,
   backgroundData,
 }: TemplateEditorProps) {
-
-  const { selectedBackground, selectedLayout, scaleFactor, setScaleFactor } = useBlogThumbnailStore(
-    useShallow((state) => ({ selectedBackground: state.selectedBackground, selectedLayout: state.selectedLayout, scaleFactor: state.scaleFactor, setScaleFactor: state.setScaleFactor })),
-  );
+  const { selectedBackground, selectedLayout, scaleFactor, setScaleFactor } =
+    useBlogThumbnailStore(
+      useShallow((state) => ({
+        selectedBackground: state.selectedBackground,
+        selectedLayout: state.selectedLayout,
+        scaleFactor: state.scaleFactor,
+        setScaleFactor: state.setScaleFactor,
+      })),
+    );
 
   const getRecommendedColorByAssetType = (assetType: LayoutElementType) => {
     return assetType === "HEADING"
-      ? selectedBackground?.recommendedColors?.primary ?? "#000000"
+      ? (selectedBackground?.recommendedColors?.primary ?? "#000000")
       : assetType === "SUBHEADING"
-        ? selectedBackground?.recommendedColors?.secondary ?? "#000000"
+        ? (selectedBackground?.recommendedColors?.secondary ?? "#000000")
         : "#000000";
   };
 
-  const [selectedElement, setSelectedElement] = useState<fabric.Object | null>(null);
-  const [selectedElementUpdates, setSelectedElementUpdates] = useState<SelectedElement>(defaultTextElementState)
+  const [selectedElement, setSelectedElement] = useState<fabric.Object | null>(
+    null,
+  );
+  const [selectedElementUpdates, setSelectedElementUpdates] =
+    useState<SelectedElement>(defaultTextElementState);
   const [zoomLevel, setZoomLevel] = useState(1);
 
-  const { canvasRef, addScaledText, exportCanvas, setBackgroundImage, addImage } =
-    useFabricCanvas({
-      originalWidth: canvasDimensions.width * scaleFactor.canvas,
-      originalHeight: canvasDimensions.height * scaleFactor.canvas,
-      scaleFactor: scaleFactor,
-      backgroundColor: "white",
-    });
+  const {
+    canvasRef,
+    addScaledText,
+    exportCanvas,
+    setBackgroundImage,
+    addImage,
+  } = useFabricCanvas({
+    originalWidth: canvasDimensions.width * scaleFactor.canvas,
+    originalHeight: canvasDimensions.height * scaleFactor.canvas,
+    scaleFactor: scaleFactor,
+    backgroundColor: "white",
+  });
 
   // Initialize canvas with template assets
   useEffect(() => {
-
     if (!canvasRef.current) return;
 
     // Clear existing objects before adding new ones
     canvasRef.current.clear();
 
     if (selectedLayout) {
-
       selectedLayout?.elements.forEach((asset) => {
         if (asset.type != "IMAGE") {
-          const elementColor = getRecommendedColorByAssetType(asset.type)
+          const elementColor = getRecommendedColorByAssetType(asset.type);
           addScaledText(
             asset.label,
             (asset.fontSize ?? 0) * scaleFactor.text,
@@ -82,40 +101,37 @@ export default function TemplateEditor({
             (asset.width ?? 0) * scaleFactor.text,
             (asset.height ?? 0) * scaleFactor.text,
             elementColor,
-            getOptimisedFontFamilyByName(asset?.fontFamily?.toLocaleLowerCase() as SupportedFonts),
-            Number(asset.fontWeight) ?? 100
+            getOptimisedFontFamilyByName(
+              asset?.fontFamily?.toLocaleLowerCase() as SupportedFonts,
+            ),
+            Number(asset.fontWeight) ?? 100,
           );
+        } else {
+          addImage(asset);
         }
-        else {
-          addImage(asset)
-        }
-
       });
     }
-
 
     // Check if a background image is already set
     if (selectedBackground?.imageUrl) {
       setBackgroundImage(selectedBackground.imageUrl);
     }
-
-
   }, [selectedBackground, selectedLayout]);
 
-  console.log(scaleFactor)
+  console.log(scaleFactor);
   // Update scale factor on window resize
   useLayoutEffect(() => {
-    console.log(window.innerWidth)
+    console.log(window.innerWidth);
     const handleResize = () => {
       const newScaleFactor = calculateScaleFactor(window.innerWidth);
       setScaleFactor(newScaleFactor);
-    }
+    };
     handleResize();
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -166,7 +182,6 @@ export default function TemplateEditor({
         fontWeight: textObject.fontWeight as number,
       });
     } else if (object.type === "image") {
-
       const imageObject = object as fabric.Image;
       setSelectedElementUpdates({
         ...defaultImageElementState,
@@ -247,9 +262,14 @@ export default function TemplateEditor({
           />
 
           <div className={styles.mainContent}>
-            {selectedBackground && <div className={styles.sidePanel}>
-              <LayerPanel background={selectedBackground} layoutElements={selectedLayout?.elements ?? []} />
-            </div>}
+            {selectedBackground && (
+              <div className={styles.sidePanel}>
+                <LayerPanel
+                  background={selectedBackground}
+                  layoutElements={selectedLayout?.elements ?? []}
+                />
+              </div>
+            )}
 
             <div className={styles.canvasWrapper}>
               <canvas
