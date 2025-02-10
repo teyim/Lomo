@@ -79,8 +79,9 @@ model AssetCategory {
 
 model Asset {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  url         String   // URL to the asset file
+  name        String   @unique
+  imgUrl      String   // URL to the asset file
+  imgKey      String
   categoryId  String   @db.ObjectId
   category    AssetCategory @relation(fields: [categoryId], references: [id])
   createdAt   DateTime @default(now())
