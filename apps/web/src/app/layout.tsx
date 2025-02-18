@@ -3,23 +3,13 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Lexend, Lekton } from "next/font/google";
 import { ModalProvider } from "@/context/ModalContext";
+import ReactQueryProvider from '@/components/queryProvider';
 
-export const lexend = Lexend({
-  subsets: ["latin"],
-  display: "swap",
-});
+export const lexend = Lexend({ subsets: ['latin'], display: 'swap' });
 
-export const lekton = Lekton({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  display: "swap",
-});
+export const lekton = Lekton({ weight: ['400', '700'], subsets: ['latin'], display: 'swap' });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
@@ -27,7 +17,9 @@ export default function RootLayout({
     >
       <body className="font-geist_mono text-primary">
         <div id="modal-root"></div>
-        <ModalProvider>{children}</ModalProvider>
+        <ReactQueryProvider>
+          <ModalProvider>{children}</ModalProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

@@ -100,12 +100,14 @@ export const useFabricCanvas = ({
     await addBackgroundImage();
   };
 
-  const addImage = async (data: LayoutElement) => {
+  const addImage = async (data: LayoutElement, updateImageUrl?: string) => {
     if (!canvasRef.current) return;
 
+    const imageUrl = updateImageUrl || data.imageUrl;
+
     const addCanvasImage = async () => {
-      const img = await fabric.FabricImage.fromURL(data?.imageUrl ?? "", {
-        crossOrigin: "anonymous", // Enable CORS
+      const img = await fabric.FabricImage.fromURL(imageUrl ?? '', {
+        crossOrigin: 'anonymous', // Enable CORS
       });
 
       img.scaleToHeight(data.height ?? 0);
@@ -117,7 +119,6 @@ export const useFabricCanvas = ({
       canvasRef?.current?.renderAll();
     };
 
-    // Execute the asynchronous function immediately
     await addCanvasImage();
   };
 
