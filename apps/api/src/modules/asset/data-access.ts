@@ -62,3 +62,70 @@ export const getAssetsByCategory = async (categoryId: string): Promise<Asset[] |
     throw new Error(getDataAccessErrorMessage('asset', 'get'));
   }
 };
+
+export const deleteAsset = async (id: string) => {
+  try {
+    const asset = await prisma.asset.findUnique({ where: { id } });
+
+    if (!asset) {
+      throw new ErrorWithStatus('Asset not found', HttpStatusCode.NotFound);
+    }
+
+    const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, asset.imgKey);
+
+    if (!isDeleted) {
+      throw new ErrorWithStatus('Failed to delete S3 object', HttpStatusCode.InternalServerError);
+    }
+
+    await prisma.asset.delete({ where: { id } });
+  } catch (error) {
+    if (error instanceof ErrorWithStatus) {
+      if (error.message === 'Asset not found') {
+        console.error('Asset not found');
+        throw new ErrorWithStatus(error.message, error.status);
+      }
+    }
+
+    console.error(getDataAccessErrorMessage('asset', 'delete'), error);
+    throw new Error(getDataAccessErrorMessage('asset', 'delete'));
+  }
+};
+
+export const updateAsset = async (
+  id: string,
+  name: string,
+  imgUrl: string,
+  imgKey: string,
+  categoryId: string
+) => {
+  try {
+    const asset = await prisma.asset.findUnique({ where: { id } });
+
+    if (!asset) {
+      throw new ErrorWithStatus('Asset not found', HttpStatusCode.NotFound);
+    }
+
+    const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, asset.imgKey);
+
+    if (!isDeleted) {
+      throw new ErrorWithStatus('Failed to delete S3 object', HttpStatusCode.InternalServerError);
+    }
+
+    const updatedAsset = await prisma.asset.update({
+      where: { id },
+      data: { name, imgUrl, imgKey, categoryId },
+    });
+
+    return updatedAsset;
+  } catch (error) {
+    if (error instanceof ErrorWithStatus) {
+      if (error.message === 'Asset not found') {
+        console.error('Asset not found');
+        throw new ErrorWithStatus(error.message, error.status);
+      }
+    }
+
+    console.error(getDataAccessErrorMessage('asset', 'update'), error);
+    throw new Error(getDataAccessErrorMessage('asset', 'update'));
+  }
+};
