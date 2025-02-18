@@ -16,6 +16,8 @@ export const canvasDimensions = {
 
 export const supportedFonts = ["lekton", "lexend"] as const;
 
+export const QUERY_KEYS = { Assets_By_Category: 'assetByCategory' };
+
 // Default state for selected element
 export const defaultTextElementState = {
   type: "textbox",

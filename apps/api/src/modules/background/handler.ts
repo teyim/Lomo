@@ -6,16 +6,21 @@ import {
   updateBackgroundController,
 } from "./controller";
 import upload from "../../utils/upload";
+import { AWS_FOLDERS } from '../../constants';
 
 const router = Router();
 
 // add background
-router.post("/", upload.single("background"), addBackgroundController);
+router.post('/', upload(AWS_FOLDERS.BACKGROUNDS).single('background'), addBackgroundController);
 // delete background
-router.delete("/:id", deleteBackgroundController);
+router.delete('/:id', deleteBackgroundController);
 // get all backgrounds
-router.get("/", getAllBackgroundsController);
+router.get('/', getAllBackgroundsController);
 //update background
-router.put("/:id", upload.single("background"), updateBackgroundController);
+router.put(
+  '/:id',
+  upload(AWS_FOLDERS.BACKGROUNDS).single('background'),
+  updateBackgroundController
+);
 
 export default router;
