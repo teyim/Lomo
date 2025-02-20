@@ -1,17 +1,11 @@
-import {
-  Download,
-  ZoomIn,
-  ZoomOut,
-  FileImage,
-  LayoutGrid,
-  Shovel,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useModal } from "@/context/ModalContext";
-import { Background } from "@repo/db";
-import BackgroundCards from "../sections/modulesCards";
-import { LayoutWithElements } from "@/types";
-import ModulesCards from "../sections/modulesCards";
+/* eslint-disable no-unused-vars */
+import { Download, ZoomIn, ZoomOut, FileImage, LayoutGrid, Shovel } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useModal } from '@/context/ModalContext';
+import { Background } from '@repo/db';
+import BackgroundCards from '../sections/modulesCards';
+import { LayoutWithElements } from '@/types';
+import ModulesCards from '../sections/modulesCards';
 
 interface ToolbarPanelProps {
   onZoomIn: () => void;
@@ -39,9 +33,7 @@ export default function ToolbarPanel({
           variant="ghost"
           size="icon"
           className="h-8"
-          onClick={() =>
-            showModal(<ModulesCards backgrounds={backgroundData} />)
-          }
+          onClick={() => showModal(<ModulesCards backgrounds={backgroundData} />)}
         >
           <FileImage className="h-4 w-4" />
         </Button>
@@ -61,9 +53,7 @@ export default function ToolbarPanel({
         >
           <ZoomOut className="h-4 w-4" />
         </Button>
-        <span className="text-xs w-12 text-center">
-          {Math.round(zoomLevel * 100)}%
-        </span>
+        <span className="text-xs w-12 text-center">{Math.round(zoomLevel * 100)}%</span>
         <Button
           variant="ghost"
           size="icon"

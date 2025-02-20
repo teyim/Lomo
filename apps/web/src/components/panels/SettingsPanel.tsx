@@ -1,26 +1,19 @@
-import React from "react";
-import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
+/* eslint-disable no-unused-vars */
+import React from 'react';
+import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import {
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  Type,
-  Palette,
-  X,
-  XIcon,
-} from "lucide-react";
-import { supportedFonts } from "@/constants";
-import { constainsSubstring } from "@/lib/utils";
-import { SelectedElement } from "@/types";
-import { Button } from "../ui/button";
+} from '@/components/ui/select';
+import { AlignLeft, AlignCenter, AlignRight, Type, Palette, X, XIcon } from 'lucide-react';
+import { supportedFonts } from '@/constants';
+import { constainsSubstring } from '@/lib/utils';
+import { SelectedElement } from '@/types';
+import { Button } from '../ui/button';
 import { AssetCategory } from '@repo/db';
 import {
   DropdownMenu,
@@ -37,7 +30,11 @@ interface SettingsPanelProps {
   categories: AssetCategory[];
 }
 
-export default function SettingsPanel({ selectedElement, onUpdate, categories }: SettingsPanelProps) {
+export default function SettingsPanel({
+  selectedElement,
+  onUpdate,
+  categories,
+}: SettingsPanelProps) {
   const categoriesDropdownOptions = categories.map(category => ({
     value: category.id,
     label: category.name,
@@ -186,7 +183,6 @@ export default function SettingsPanel({ selectedElement, onUpdate, categories }:
                   {categoriesDropdownOptions.map(category => (
                     <DropdownMenuItem
                       key={category.value}
-                      value={category.value}
                       onClick={() => showModal(<AssetsCards categoryId={category.value} />)}
                       className="text-sm"
                     >

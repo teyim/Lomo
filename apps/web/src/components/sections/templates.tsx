@@ -26,7 +26,7 @@ function TemplatesSection({ templates }: TemplatesSectionProps) {
           className="w-[150px] bg-gray-100 hover:bg-gray-200" // Custom styles
         />
         <div className="mt-10 grid lg:grid-cols-4 grid-cols-1 gap-4">
-          {templates.map((templates, index) => (
+          {templates.map(templates => (
             <Card
               key={templates.id}
               title={templates.name}
