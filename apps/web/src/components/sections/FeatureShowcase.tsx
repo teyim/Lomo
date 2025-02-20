@@ -8,7 +8,7 @@ const features = [
   {
     icon: Palette,
     title: 'Pick Your Background',
-    description: 'Select from vibrant gradients, textures, or upload your own(coming soon).',
+    description: 'Select from vibrant gradients, textures, or upload your own(coming).',
     chart: {
       total: 'Step 1',
       data: [350, 280, 420, 480, 380, 320],

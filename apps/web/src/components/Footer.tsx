@@ -2,22 +2,34 @@ import React from 'react';
 
 function Footer() {
   return (
-    <section className="container mx-auto px-4 pt-24 pb-32 text-center relative">
-      {/* ...existing hero content... */}
+    <footer className="w-full bg-gray-50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          {/* Copyright */}
+          <div className="text-sm sm:text-base text-gray-500">
+            © {new Date().getFullYear()} Lomo AI. All rights reserved.
+          </div>
 
-      <footer className="absolute bottom-4 left-0 right-0 text-center text-sm text-gray-500">
-        <p className="font-normal">
-          © {new Date().getFullYear()} Lomo AI. All rights reserved.
-          <span className="mx-2">•</span>
-          <span className="hover:text-gray-700 transition-colors">
-            Crafted with ❤️ by{' '}
-            <a className="font-bold text-gray-800 hover:text-gray-900 cursor-pointer">
+          {/* Divider for mobile */}
+          <div className="block md:hidden w-full h-px bg-gray-200" />
+
+          {/* Creator */}
+          <div className="text-sm sm:text-base text-gray-500 flex items-center gap-2">
+            <span>Crafted with</span>
+            <span className="text-red-500">❤️</span>
+            <span>by</span>
+            <a
+              href="https://github.com/teyim"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-gray-800 hover:text-gray-900 transition-colors"
+            >
               Teyim Asobo
             </a>
-          </span>
-        </p>
-      </footer>
-    </section>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }
 

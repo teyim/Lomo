@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { ImageIcon, Palette, Layout, MousePointer, Download } from 'lucide-react';
 import Link from 'next/link';
-import { Card, CardHeader, CardContent, CardFooter } from '../ui/card';
+import { Card, CardHeader, CardFooter } from '../ui/card';
 
 export default function FeatureCards() {
   const features = [
@@ -42,33 +42,37 @@ export default function FeatureCards() {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12">Why Lomo?</h2>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
+    <section className="py-12 sm:py-16 lg:py-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-8 sm:mb-12 lg:mb-16">
+          Why Lomo?
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="border-0 shadow-lg rounded-3xl hover:shadow-xl transition-shadow duration-300"
+              className="border border-gray-200 rounded-2xl hover:shadow-lg transition-shadow duration-300"
             >
-              <CardHeader>
-                <feature.icon className="w-8 h-8 mb-4 text-gray-700" />
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-semibold">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {feature.badges.map(badge => (
-                      <Badge
-                        key={badge}
-                        variant="outline"
-                        className="rounded-full font-normal bg-transparent"
-                      >
-                        {badge}
-                      </Badge>
-                    ))}
-                  </div>
+              <CardHeader className="space-y-4 p-6">
+                <div className="w-12 h-12 bg-black/5 rounded-2xl flex items-center justify-center">
+                  <feature.icon className="w-6 h-6" />
                 </div>
+                <h3 className="text-xl sm:text-2xl font-semibold">{feature.title}</h3>
+                <p className="text-sm sm:text-base text-gray-600">{feature.description}</p>
               </CardHeader>
+              <CardFooter className="p-6 pt-0">
+                <div className="flex flex-wrap gap-2">
+                  {feature.badges.map(badge => (
+                    <Badge
+                      key={badge}
+                      variant="secondary"
+                      className="rounded-full text-xs sm:text-sm"
+                    >
+                      {badge}
+                    </Badge>
+                  ))}
+                </div>
+              </CardFooter>
             </Card>
           ))}
         </div>

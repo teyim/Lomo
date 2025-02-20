@@ -53,96 +53,61 @@ const testimonials = [
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-    },
-  },
-};
 
-const StarRating = ({ rating }: { rating: number }) => {
-  return (
-    <div className="flex gap-1 mb-3">
-      {[...Array(rating)].map((_, i) => (
-        <Star
-          key={i}
-          className="w-5 h-5 fill-[#C8FF32] text-[#C8FF32]"
-          strokeWidth={1}
-        />
-      ))}
-    </div>
-  );
-};
 
 export default function Testimonials() {
+  const duplicatedTestimonials = [...testimonials, ...testimonials];
+
   return (
-    <div className="bg-[#0F1117] py-24 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4">
-        <motion.h2
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl md:text-5xl font-bold text-white text-center mb-16"
-        >
-          Loved by content creators worldwide
-        </motion.h2>
-      </div>
+    <div className="bg-[#0F1117] py-24 px-4 relative overflow-hidden">
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: `radial-gradient(circle at 50% 0%, #ffffff 0.5px, transparent 0.5px)`,
+          backgroundSize: '50px 50px',
+        }}
+      />
+
+      <motion.h2
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        className="text-4xl md:text-5xl font-bold text-white text-center mb-16"
+      >
+        Loved by content creators worldwide
+      </motion.h2>
 
       <div className="relative w-full overflow-hidden">
         <motion.div
-          className="flex gap-6 w-max"
+          className="flex gap-8 w-fit"
           animate={{
-            x: [0, -50 * testimonials.length],
+            x: ['0%', '-50%'],
           }}
           transition={{
-            x: {
-              repeat: Infinity,
-              repeatType: 'loop',
-              duration: 50,
-              ease: 'linear',
-            },
+            duration: 20,
+            ease: 'linear',
+            repeat: Infinity,
           }}
         >
-          {/* Original testimonials */}
-          {testimonials.map((testimonial, index) => (
+          {duplicatedTestimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-[#1A1D26] p-6 rounded-2xl w-[400px] flex-shrink-0"
+              className="flex-shrink-0 w-[350px] bg-white/5 backdrop-blur-sm p-6 rounded-2xl"
             >
-              <StarRating rating={testimonial.rating} />
-              <p className="text-white mb-4 text-lg leading-relaxed">"{testimonial.quote}"</p>
-              <div className="text-gray-400">
-                <p className="font-medium">— {testimonial.author}</p>
-                <p className="text-sm">{testimonial.role}</p>
+              <div className="flex gap-1 mb-4">
+                {[...Array(testimonial.rating)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className="w-5 h-5 fill-[#C8FF32] text-[#C8FF32]"
+                    strokeWidth={1}
+                  />
+                ))}
               </div>
-            </div>
-          ))}
-
-          {/* Duplicated testimonials for seamless loop */}
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={`duplicate-${index}`}
-              className="bg-[#1A1D26] p-6 rounded-2xl w-[400px] flex-shrink-0"
-            >
-              <StarRating rating={testimonial.rating} />
-              <p className="text-white mb-4 text-lg leading-relaxed">"{testimonial.quote}"</p>
-              <div className="text-gray-400">
-                <p className="font-medium">— {testimonial.author}</p>
-                <p className="text-sm">{testimonial.role}</p>
+              <p className="text-white/90 mb-6">{testimonial.quote}</p>
+              <div>
+                <p className="text-white font-semibold">{testimonial.author}</p>
+                <p className="text-white/60">{testimonial.role}</p>
               </div>
             </div>
           ))}
