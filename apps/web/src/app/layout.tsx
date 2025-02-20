@@ -15,6 +15,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${GeistSans.variable} ${GeistMono.variable} ${lexend.className}`}
     >
+      <link
+        rel="icon"
+        href="/logo.ico"
+        sizes="any"
+      />
       <body className="font-geist_mono text-primary">
         <div id="modal-root"></div>
         <ReactQueryProvider>
