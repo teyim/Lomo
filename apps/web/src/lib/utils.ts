@@ -1,4 +1,5 @@
-import { lexend, lekton } from '@/app/layout';
+/* eslint-disable no-unused-vars */
+
 import { canvasDimensions } from '@/constants';
 import { useBlogThumbnailStore } from '@/store';
 import { SupportedFonts } from '@/types';
@@ -7,6 +8,11 @@ import { Canvas } from 'fabric';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useShallow } from 'zustand/shallow';
+import { Lexend, Lekton } from 'next/font/google';
+
+const lexend = Lexend({ subsets: ['latin'], display: 'swap' });
+
+const lekton = Lekton({ weight: ['400', '700'], subsets: ['latin'], display: 'swap' });
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

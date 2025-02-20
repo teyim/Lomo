@@ -1,6 +1,5 @@
 import { Badge } from '@/components/ui/badge';
 import { ImageIcon, Palette, Layout, MousePointer, Download } from 'lucide-react';
-import Link from 'next/link';
 import { Card, CardHeader, CardFooter } from '../ui/card';
 
 export default function FeatureCards() {

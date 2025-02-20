@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import img1 from 'public/images/thumbnails/Frame6.jpg';
 import img2 from 'public/images/thumbnails/Frame 8.jpg';

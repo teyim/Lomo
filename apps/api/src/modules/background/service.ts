@@ -39,29 +39,23 @@ export const deleteBackgroundService = async (id: string): Promise<void> => {
     const background = await getBackgroundByIdWithTemplates(id);
 
     if (!background) {
-      throw new ErrorWithStatus(
-        ErrorMessages.BACKGROUND.NOT_FOUND,
-        HttpStatusCode.NotFound,
-      );
+      throw new ErrorWithStatus(ErrorMessages.BACKGROUND.NOT_FOUND, HttpStatusCode.NotFound);
     }
 
-    // Prevent deletion if templates exist
-    if (background.templates.length > 0) {
-      throw new ErrorWithStatus(
-        ErrorMessages.BACKGROUND.DELETE_WITH_TEMPLATES,
-        HttpStatusCode.BadRequest,
-      );
-    }
+    // // Prevent deletion if templates exist
+    // if (background.templates.length > 0) {
+    //   throw new ErrorWithStatus(
+    //     ErrorMessages.BACKGROUND.DELETE_WITH_TEMPLATES,
+    //     HttpStatusCode.BadRequest,
+    //   );
+    // }
 
     // Delete from S3 and database
-    const isDeleted = await deleteS3Object(
-      ENV_variables.AWS_S3_BUCKET,
-      background.imgKey,
-    );
+    const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, background.imgKey);
     if (!!isDeleted) {
       await deleteBackgroundById(id);
     } else {
-      throw new ErrorWithStatus("Error deleting background in S3 Bucket ", 500);
+      throw new ErrorWithStatus('Error deleting background in S3 Bucket ', 500);
     }
   } catch (error: any) {
     if (error instanceof ErrorWithStatus) throw error;

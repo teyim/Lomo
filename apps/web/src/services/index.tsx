@@ -1,6 +1,6 @@
 import { baseUrl } from '@/constants';
 import { LayoutWithElements, Template } from '@/types';
-import { Asset, AssetCategory, Background, Layout } from '@repo/db';
+import { Asset, AssetCategory, Background } from '@repo/db';
 
 // get all blogpost templates
 export const getBlogPostTemplates = async () => {

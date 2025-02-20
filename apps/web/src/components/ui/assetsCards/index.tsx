@@ -1,6 +1,5 @@
 'use client';
 
-import { Asset } from '@repo/db';
 import React from 'react';
 import AssetsCard from './Card';
 import { useQuery } from '@tanstack/react-query';

@@ -1,9 +1,7 @@
 'use client';
 import React from 'react';
-import rocketEmoji from 'public/emoji/Rocket.svg';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Zap } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 

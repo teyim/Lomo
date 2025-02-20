@@ -1,7 +1,4 @@
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 import StackedCards from '@/components/StackedCards';
-import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 import FeatureCards from '@/components/cards/FeatureCards';
 import FeatureShowcase from '@/components/sections/FeatureShowcase';

@@ -15,8 +15,7 @@ import Image from "next/image";
 import { AssetCategory, Background, LayoutElementType } from '@repo/db';
 import { useBlogThumbnailStore } from '@/store';
 import { useShallow } from 'zustand/shallow';
-import { lexend } from '@/app/(marketing)/layout';
-import { calculateScaleFactor, getOptimisedFontFamilyByName, scaleCanvas } from '@/lib/utils';
+import { calculateScaleFactor, getOptimisedFontFamilyByName } from '@/lib/utils';
 import SettingsPanel from './panels/SettingsPanel';
 
 type TemplateEditorProps = {
@@ -36,7 +35,11 @@ const styles = {
   desktopContent: ' w-full h-full',
 } as const;
 
-export default function TemplateEditor({ layoutData, backgroundData, categoriesData }: TemplateEditorProps) {
+export default function TemplateEditor({
+  layoutData,
+  backgroundData,
+  categoriesData,
+}: TemplateEditorProps) {
   const { selectedBackground, selectedLayout, scaleFactor, setScaleFactor, selectedImageAseet } =
     useBlogThumbnailStore(
       useShallow(state => ({
@@ -128,9 +131,9 @@ export default function TemplateEditor({ layoutData, backgroundData, categoriesD
     if (!canvasRef.current) return;
 
     const eventHandlers = {
-      'selection:created': (event: fabric.IEvent) =>
+      'selection:created': (event: any) =>
         handleObjectSelection(event.selected?.[0] as fabric.Object),
-      'selection:updated': (event: fabric.IEvent) =>
+      'selection:updated': (event: any) =>
         handleObjectSelection(event.selected?.[0] as fabric.Object),
       'selection:cleared': clearSelectedElement,
     };

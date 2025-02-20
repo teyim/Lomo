@@ -1,6 +1,5 @@
 import { json, urlencoded } from "body-parser";
-import express, { type Express } from "express";
-import templateController from "./modules/template/handler";
+import express, { type Express } from 'express';
 import backgroundHandler from "./modules/background/handler";
 import layoutHandler from "./modules/layout/handler";
 import assetCategoryHandler from "./modules/assetCategory/handler";
@@ -17,7 +16,6 @@ export const createServer = (): Express => {
     .use(urlencoded({ extended: true }))
     .use(json())
     .use(cors())
-    .use('/templates', templateController)
     .use('/backgrounds', backgroundHandler)
     .use('/layouts', layoutHandler)
     .use('/asset-categories', assetCategoryHandler)

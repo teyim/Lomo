@@ -65,13 +65,10 @@ export const addBackground = async (
   }
 };
 
-export const getBackgroundByIdWithTemplates = async (
-  id: string
-): Promise<(Background & { templates: Template[] }) | null> => {
+export const getBackgroundByIdWithTemplates = async (id: string): Promise<Background | null> => {
   try {
     const background = await prisma.background.findUnique({
       where: { id },
-      include: { templates: true },
     });
     return background;
   } catch (error) {

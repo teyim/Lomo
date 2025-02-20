@@ -1,31 +1,23 @@
-import {
-  defaultImageElementState,
-  defaultTextElementState,
-  supportedFonts,
-} from "@/constants";
-import { Layout, LayoutElement } from "@repo/db";
+/* eslint-disable no-unused-vars */
+import { defaultImageElementState, defaultTextElementState, supportedFonts } from '@/constants';
+import { Layout, LayoutElement } from '@repo/db';
 
 export enum DynamicRoutes {
-  Template = "/template",
+  Template = '/template',
 }
 
 export type SupportedFonts = (typeof supportedFonts)[number];
 
-export type module = "background" | "layout";
+export type module = 'background' | 'layout';
 
 export type RouteParams = {
   slug: string;
   dynamicRouteName: DynamicRoutes;
 };
 
-export type LayoutElementType = "HEADING" | "SUBHEADING" | "IMAGE";
+export type LayoutElementType = 'HEADING' | 'SUBHEADING' | 'IMAGE';
 
-type TemplateTextFontWeight =
-  | "Bold"
-  | "Regular"
-  | "Light"
-  | "SemiBold"
-  | "ExtraBold";
+type TemplateTextFontWeight = 'Bold' | 'Regular' | 'Light' | 'SemiBold' | 'ExtraBold';
 
 export interface TemplateAsset {
   id: string;
@@ -81,6 +73,4 @@ export interface LayoutWithElements extends Layout {
   elements: LayoutElement[];
 }
 
-export type SelectedElement =
-  | typeof defaultTextElementState
-  | typeof defaultImageElementState;
+export type SelectedElement = typeof defaultTextElementState | typeof defaultImageElementState;

@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { CanvasOptions, RouteParams } from "@/types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from 'react';
 import * as fabric from "fabric";
 import { scaleCanvas } from "@/lib/utils";
 import { defaultScaleFactor } from "@/constants";
@@ -17,24 +17,19 @@ export const useDynamicNavigation = () => {
   return { navigateToRoute };
 };
 
-export const useFabricCanvas = ({
-  originalWidth,
-  originalHeight,
-  scaleFactor,
-  backgroundColor,
-}: CanvasOptions) => {
+export const useFabricCanvas = ({ originalWidth, originalHeight, scaleFactor }: CanvasOptions) => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
 
   // Initialize canvas
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    const canvas = new fabric.Canvas("canvas", {
+    const canvas = new fabric.Canvas('canvas', {
       width: originalWidth,
       height: originalHeight,
       preserveObjectStacking: true,
       renderOnAddRemove: false,
-      backgroundColor: "red",
+      backgroundColor: 'red',
     });
 
     canvasRef.current = canvas;
@@ -55,7 +50,7 @@ export const useFabricCanvas = ({
     height: number,
     color: string,
     fontFamily: string,
-    fontWeight: number,
+    fontWeight: number
   ) => {
     console.log(color);
     if (!canvasRef.current) return;
@@ -69,7 +64,7 @@ export const useFabricCanvas = ({
       fill: color,
       fontFamily: fontFamily,
       fontWeight: fontWeight,
-      textAlign: "left",
+      textAlign: 'left',
     });
 
     canvasRef.current.add(scaledText);
@@ -78,12 +73,12 @@ export const useFabricCanvas = ({
 
   // Function to set background image
   const setBackgroundImage = async (imageUrl: string) => {
-    console.log("ran-background add");
+    console.log('ran-background add');
     if (!canvasRef.current) return;
 
     const addBackgroundImage = async () => {
       const img = await fabric.FabricImage.fromURL(imageUrl, {
-        crossOrigin: "anonymous", // Enable CORS
+        crossOrigin: 'anonymous', // Enable CORS
       });
       img.scale(scaleFactor.canvas);
       img.selectable = false;
@@ -129,7 +124,7 @@ export const useFabricCanvas = ({
     scaleCanvas(canvasRef.current, defaultScaleFactor);
 
     const dataURL = canvasRef.current.toDataURL({
-      format: "jpeg",
+      format: 'jpeg',
       quality: 1,
       multiplier: 2,
     });
