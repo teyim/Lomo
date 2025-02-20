@@ -15,7 +15,7 @@ import Image from "next/image";
 import { AssetCategory, Background, LayoutElementType } from '@repo/db';
 import { useBlogThumbnailStore } from '@/store';
 import { useShallow } from 'zustand/shallow';
-import { lexend } from '@/app/layout';
+import { lexend } from '@/app/(marketing)/layout';
 import { calculateScaleFactor, getOptimisedFontFamilyByName, scaleCanvas } from '@/lib/utils';
 import SettingsPanel from './panels/SettingsPanel';
 
