@@ -1,13 +1,24 @@
-import Header from "@/components/Header";
-import React from "react";
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import StackedCards from '@/components/StackedCards';
+import Navbar from '@/components/Navbar';
+import Header from '@/components/Header';
+import FeatureCards from '@/components/cards/FeatureCards';
+import FeatureShowcase from '@/components/sections/FeatureShowcase';
+import Testimonials from '@/components/sections/Testimonials';
+import FAQSection from '@/components/sections/Faq';
 
-async function page() {
+export default function Home() {
   return (
-    <section>
+    <main>
       <Header />
-      <div className="bg-[#F5F7FA]">landing page</div>
-    </section>
+      <div className=" relative z-10">
+        <StackedCards />
+      </div>
+      <FeatureCards />
+      <FeatureShowcase />
+      <Testimonials />
+      <FAQSection />
+    </main>
   );
 }
-
-export default page;

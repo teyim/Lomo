@@ -1,54 +1,76 @@
-"use client";
+import * as React from "react"
 
-import { useDynamicNavigation } from "@/hooks";
-import Image from "next/image";
-import React from "react";
-import { Button } from "./button";
-import { DynamicRoutes } from "@/types";
-import { PenToolIcon } from "lucide-react";
-type CardProps = {
-  title: string;
-  imageUrl: string;
-  id: string;
-};
-function Card({ title, imageUrl, id }: CardProps) {
-  const { navigateToRoute } = useDynamicNavigation();
+import { cn } from "@/lib/utils"
 
-  const handleClick = () => {
-    navigateToRoute({
-      slug: `${id}`,
-      dynamicRouteName: DynamicRoutes.Template,
-    });
-  };
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-xl border border-zinc-200 bg-white text-zinc-950 shadow dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50",
+      className
+    )}
+    {...props}
+  />
+))
+Card.displayName = "Card"
 
-  return (
-    <div className="rounded-xl p-3 bg-white ring-1 ring-slate-500 ">
-      <div>
-        <Image
-          src={imageUrl}
-          alt={title}
-          width={400}
-          height={400}
-          className="rounded-xl"
-          priority
-        />
-      </div>
-      <div>
-        <p className="mt-3 font-geist_mono font-bold">{title}</p>
-      </div>
-      <div>
-        <Button
-          onClick={handleClick}
-          className="rounded-xl flex space-x-2 items-center"
-        >
-          <span>Edit</span>
-          <span>
-            <PenToolIcon size={15} />
-          </span>
-        </Button>
-      </div>
-    </div>
-  );
-}
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
 
-export default Card;
+const CardTitle = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("font-semibold leading-none tracking-tight", className)}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
+
+const CardDescription = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("text-sm text-zinc-500 dark:text-zinc-400", className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

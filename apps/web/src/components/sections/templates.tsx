@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
-import Card from "@/components/ui/card";
-import Dropdown from "@/components/ui/dropdown";
-import { thumbnailCategories } from "@/constants";
-import { Template } from "@prisma/client";
+import Card from '@/components/cards/card';
+import Dropdown from '@/components/ui/dropdown';
+import { thumbnailCategories } from '@/constants';
+import { Template } from '@/types';
+
 
 type TemplatesSectionProps = {
   templates: Template[];
