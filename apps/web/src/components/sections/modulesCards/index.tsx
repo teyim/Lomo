@@ -10,8 +10,8 @@ type ModulesCardsProps = {
 function ModulesCards({ backgrounds, layouts }: ModulesCardsProps) {
   if (backgrounds) {
     return (
-      <div className="grid grid-cols-3 gap-4">
-        {backgrounds?.map((background) => (
+      <div className="grid grid-cols-3 gap-4 max-h-[600px] overflow-y-scroll p-4">
+        {backgrounds?.map(background => (
           <ModulesCard
             cardType="background"
             imageUrl={background?.imageUrl}
@@ -25,8 +25,8 @@ function ModulesCards({ backgrounds, layouts }: ModulesCardsProps) {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {layouts?.map((layout) => (
+    <div className="grid grid-cols-3 gap-4 p-4  max-h-[600px] overflow-y-scroll">
+      {layouts?.map(layout => (
         <ModulesCard
           cardType="layout"
           imageUrl={layout?.previewimage}

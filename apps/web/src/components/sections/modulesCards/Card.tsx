@@ -64,7 +64,7 @@ function ModulesCard({
           alt={`thumbnail-${cardType}`}
           width={185}
           height={90}
-          className="rounded-2xl h-full w-full"
+          className="rounded-2xl h-full w-full object-contain"
         />
       </button>
       <div className="mt-2">

@@ -36,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       <div className="absolute inset-0 bg-black opacity-50" />
       {/* Modal Content */}
       <div
-        className="relative z-10 max-w-3xl p-8 bg-white rounded shadow-lg"
+        className="relative z-10 max-w-3xl p-2 bg-white rounded shadow-lg"
         onClick={handleContentClick}
       >
         <button
@@ -49,7 +49,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         {children}
       </div>
     </div>,
-    modalRoot,
+    modalRoot
   );
 };
 
