@@ -1,3 +1,6 @@
+# LOMO
+Easily create beautiful blog post Thumbnails
+
 # Turborepo Docker starter
 
 This is an official Docker starter Turborepo.
@@ -5,6 +8,7 @@ This is an official Docker starter Turborepo.
 ## Using this example
 
 Run the following command:
+
 
 ```sh
 npx create-turbo@latest -e with-docker
