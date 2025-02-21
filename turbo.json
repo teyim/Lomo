@@ -5,7 +5,8 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"],
       "dependsOn": ["^build", "^db:generate"],
-      "env": ["API_HOST"]
+      "env": ["API_HOST"],
+      "cache": true
     },
     "test": {
       "outputs": ["coverage/**"],
