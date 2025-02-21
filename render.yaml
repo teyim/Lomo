@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: api
+    rootDirectory: apps/api
+    buildCommand: npm install && npm run build
+    startCommand: node dist/index.js
+    env: node
