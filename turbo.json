@@ -5,7 +5,7 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"],
       "dependsOn": ["^build", "^db:generate"],
-      "env": ["API_HOST"],
+      "env": ["API_HOST", "AWS_ACCESS_KEY_ID", "AWS_REGION", "AWS_BUCKET", "AWS_SECRET_ACCESS_KEY", "DATABASE_URL"],
       "cache": true
     },
     "start": {
