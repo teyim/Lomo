@@ -8,6 +8,11 @@
       "env": ["API_HOST"],
       "cache": true
     },
+    "start": {
+      "dependsOn": ["build"], // Ensures build runs first
+      "cache": false,
+      "persistent": true // Required for long-running processes
+    },
     "test": {
       "outputs": ["coverage/**"],
       "dependsOn": []
