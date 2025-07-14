@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { AWS_FOLDERS } from '../../constants';
+
 import upload from '../../utils/upload';
 import {
   addAssetController,
@@ -12,7 +12,7 @@ import {
 const router = Router();
 
 // add background
-router.post('/', upload(AWS_FOLDERS.LAYOUT_ASSETS).single('asset'), addAssetController);
+router.post('/', upload().single('asset'), addAssetController);
 
 //get all assets
 router.get('/', getAllAssetsController);
@@ -24,6 +24,6 @@ router.get('/:categoryId', getAssetByCategoryController);
 router.delete('/:id', deleteAssetController);
 
 //update asset
-router.put('/:id', upload(AWS_FOLDERS.LAYOUT_ASSETS).single('asset'), updateAssetController);
+router.put('/:id', upload().single('asset'), updateAssetController);
 
 export default router;

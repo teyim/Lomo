@@ -7,5 +7,5 @@ module.exports = {
   experimental: {
     outputFileTracingRoot: path.join(__dirname, "../../"),
   },
-  images: { domains: ["lomo-bucket.s3.eu-north-1.amazonaws.com"] },
+  images: { domains: ["yberslmruhyqoangnstx.supabase.co"] },
 };

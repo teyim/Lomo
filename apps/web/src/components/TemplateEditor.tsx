@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import * as fabric from "fabric";
-import { LayoutWithElements, SelectedElement, SupportedFonts } from "@/types";
+import { LayoutElementType, LayoutWithElements, SelectedElement, SupportedFonts } from '@/types';
 import { useFabricCanvas } from "@/hooks";
 import {
   canvasDimensions,
@@ -12,11 +12,12 @@ import LayerPanel from "./panels/LayerPanel";
 import ToolbarPanel from "./panels/ToolbarPanel";
 import emptystateImage from "public/illustrations/abstract-art-6.svg";
 import Image from "next/image";
-import { AssetCategory, Background, LayoutElementType } from '@repo/db';
+
 import { useBlogThumbnailStore } from '@/store';
 import { useShallow } from 'zustand/shallow';
 import { calculateScaleFactor, getOptimisedFontFamilyByName } from '@/lib/utils';
 import SettingsPanel from './panels/SettingsPanel';
+import { AssetCategory, Background } from '@repo/db';
 
 type TemplateEditorProps = {
   layoutData: LayoutWithElements[];

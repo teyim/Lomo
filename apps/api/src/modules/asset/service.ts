@@ -7,6 +7,7 @@ import {
   getAssetsByCategory,
   updateAsset,
 } from './data-access';
+import { deleteSupabaseObject } from '../../utils';
 
 export const addAssetService = async (
   name: string,

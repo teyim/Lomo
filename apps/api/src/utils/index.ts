@@ -1,5 +1,4 @@
-import { s3 } from "../awsS3Config";
-import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { supabase } from '../supabaseConfig';
 
 export function rgbToHex(r: number, g: number, b: number): string {
   const toHex = (n: number) => {
@@ -9,14 +8,16 @@ export function rgbToHex(r: number, g: number, b: number): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
-export const deleteS3Object = async (bucket: string, key: string) => {
+export const deleteSupabaseObject = async (bucket: string, key: string) => {
   try {
-    const data = await s3.send(
-      new DeleteObjectCommand({ Bucket: bucket, Key: key }),
-    );
-    return data;
+    const { error } = await supabase.storage.from(bucket).remove([key]);
+    if (error) {
+      console.error('Error deleting Supabase object:', error);
+      throw new Error('Failed to delete Supabase object');
+    }
+    return true;
   } catch (error) {
-    console.error("Error deleting S3 object:", error);
-    throw new Error("Failed to delete S3 object");
+    console.error('Error deleting Supabase object:', error);
+    throw new Error('Failed to delete Supabase object');
   }
 };

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { ErrorWithStatus } from '../../types';
+import { supabase } from '../../supabaseConfig';
+import { ErrorWithStatus } from '../../types/error';
 import { addBackgroundService } from '../background/service';
 import {
   addAssetService,
@@ -17,14 +18,23 @@ export const addAssetController = async (
 ): Promise<void> => {
   try {
     if (!req.file) {
-      const error: ErrorWithStatus = new Error('No file uploaded');
-      error.status = 400;
+      const error = new ErrorWithStatus('No file uploaded', 400);
       return next(error);
     }
 
     const { name, categoryId } = req.body;
-    const imgUrl = (req.file as Express.MulterS3.File)?.location;
-    const imgKey = (req.file as Express.MulterS3.File)?.key;
+    // Upload to Supabase Storage
+    const file = req.file;
+    const filePath = `assets/${Date.now()}-${file.originalname}`;
+    const { data, error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(filePath, file.buffer, { contentType: file.mimetype });
+    if (uploadError) {
+      return next(new ErrorWithStatus(uploadError.message, 500));
+    }
+    const imgKey = data.path;
+    const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(imgKey);
+    const imgUrl = publicUrlData.publicUrl;
 
     const background = await addAssetService(name, imgUrl, imgKey, categoryId);
 
@@ -55,8 +65,7 @@ export const getAssetByCategoryController = async (
   try {
     const { categoryId } = req.params;
     if (!categoryId) {
-      const error: ErrorWithStatus = new Error('No category id provided');
-      error.status = HttpStatusCode.BadRequest;
+      const error = new ErrorWithStatus('No category id provided', HttpStatusCode.BadRequest);
       return next(error);
     }
     const assets = await getAssetsByCategoryService(categoryId);
@@ -75,8 +84,7 @@ export const deleteAssetController = async (
   try {
     const { id } = req.params;
     if (!id) {
-      const error: ErrorWithStatus = new Error('No asset id provided');
-      error.status = HttpStatusCode.BadRequest;
+      const error = new ErrorWithStatus('No asset id provided', HttpStatusCode.BadRequest);
       return next(error);
     }
     await deleteAssetService(id);
@@ -94,20 +102,28 @@ export const updateAssetController = async (
   try {
     const { id } = req.params;
     if (!id) {
-      const error: ErrorWithStatus = new Error('No asset id provided');
-      error.status = HttpStatusCode.BadRequest;
+      const error = new ErrorWithStatus('No asset id provided', 400);
       return next(error);
     }
 
     if (!req.file) {
-      const error: ErrorWithStatus = new Error('No file uploaded');
-      error.status = HttpStatusCode.BadRequest;
+      const error = new ErrorWithStatus('No file uploaded', 400);
       return next(error);
     }
 
     const { name, categoryId } = req.body;
-    const imgUrl = (req.file as Express.MulterS3.File)?.location;
-    const imgKey = (req.file as Express.MulterS3.File)?.key;
+    // Upload to Supabase Storage
+    const file = req.file;
+    const filePath = `assets/${Date.now()}-${file.originalname}`;
+    const { data, error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(filePath, file.buffer, { contentType: file.mimetype });
+    if (uploadError) {
+      return next(new ErrorWithStatus(uploadError.message, 500));
+    }
+    const imgKey = data.path;
+    const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(imgKey);
+    const imgUrl = publicUrlData.publicUrl;
 
     const asset = await updateAssetService(id, name, imgUrl, imgKey, categoryId);
 

@@ -11,7 +11,7 @@ import {
 
 import { ENV_variables, ErrorMessages, HttpStatusCode } from "../../constants";
 import { handleError } from "../../utils/errors";
-import { deleteS3Object } from "../../utils";
+import { deleteSupabaseObject } from '../../utils';
 import { Background } from "@repo/db";
 
 export const addBackgroundService = async (
@@ -50,8 +50,8 @@ export const deleteBackgroundService = async (id: string): Promise<void> => {
     //   );
     // }
 
-    // Delete from S3 and database
-    const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, background.imgKey);
+    // Delete from Supabase and database
+    const isDeleted = await deleteSupabaseObject('images', background.imgKey);
     if (!!isDeleted) {
       await deleteBackgroundById(id);
     } else {

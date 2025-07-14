@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { getAllBackgrounds, getAllLayouts, getCategories } from '@/services';
 import TemplateEditor from '@/components/TemplateEditor';
 import Image from 'next/image';

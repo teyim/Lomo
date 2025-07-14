@@ -1,7 +1,7 @@
 import { Background } from '@prisma/client';
 import { getDataAccessErrorMessage } from '../../utils/errors';
 import { ENV_variables, HttpStatusCode } from '../../constants';
-import { deleteS3Object } from '../../utils';
+import { deleteSupabaseObject } from '../../utils';
 import { ErrorWithStatus } from '../../types/error';
 import { prisma } from '@repo/db';
 
@@ -15,7 +15,7 @@ export const addBackground = async (
     const existingBackground = await prisma.background.findUnique({ where: { name } });
 
     if (existingBackground?.id) {
-      const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, imgkey);
+      const isDeleted = await deleteSupabaseObject('images', imgkey);
 
       if (!!isDeleted) {
         throw new ErrorWithStatus(
@@ -111,8 +111,8 @@ export const updateBackground = async (
       throw new ErrorWithStatus('Background not found', HttpStatusCode.NotFound);
     }
 
-    // Delete existing image from S3
-    const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, existingBackground.imgKey);
+    // Delete existing image from Supabase
+    const isDeleted = await deleteSupabaseObject('images', existingBackground.imgKey);
 
     // Validate and parse recommendedColors
     let parsedColors = {};
