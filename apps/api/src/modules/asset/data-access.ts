@@ -1,7 +1,7 @@
 import { Asset } from '@repo/db';
 import { ENV_variables, HttpStatusCode } from '../../constants';
 import { ErrorWithStatus } from '../../types/error';
-import { deleteS3Object } from '../../utils';
+import { deleteSupabaseObject } from '../../utils';
 import { getDataAccessErrorMessage } from '../../utils/errors';
 import { prisma } from '../../constants';
 
@@ -15,7 +15,7 @@ export const addAsset = async (
     const existingAsset = await prisma.asset.findUnique({ where: { name: name } });
 
     if (existingAsset) {
-      const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, imgKey);
+      const isDeleted = await deleteSupabaseObject('images', imgKey);
 
       if (!!isDeleted) {
         throw new ErrorWithStatus(
@@ -71,7 +71,7 @@ export const deleteAsset = async (id: string) => {
       throw new ErrorWithStatus('Asset not found', HttpStatusCode.NotFound);
     }
 
-    const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, asset.imgKey);
+    const isDeleted = await deleteSupabaseObject('images', asset.imgKey);
 
     if (!isDeleted) {
       throw new ErrorWithStatus('Failed to delete S3 object', HttpStatusCode.InternalServerError);
@@ -105,7 +105,7 @@ export const updateAsset = async (
       throw new ErrorWithStatus('Asset not found', HttpStatusCode.NotFound);
     }
 
-    const isDeleted = await deleteS3Object(ENV_variables.AWS_S3_BUCKET, asset.imgKey);
+    const isDeleted = await deleteSupabaseObject('images', asset.imgKey);
 
     if (!isDeleted) {
       throw new ErrorWithStatus('Failed to delete S3 object', HttpStatusCode.InternalServerError);

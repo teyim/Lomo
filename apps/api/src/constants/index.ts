@@ -26,7 +26,6 @@ export const ErrorMessages = {
     NOT_FOUND: 'asset category not found',
   },
   DATABASE: { CONNECTION: 'Database connection error', OPERATION: 'Database operation failed' },
-  AWS: { S3_UPLOAD: 'Failed to upload file to S3', S3_DELETE: 'Failed to delete file from S3' },
 } as const;
 
 export enum HttpStatusCode {
@@ -48,10 +47,8 @@ export enum HttpStatusCode {
 }
 
 export const ENV_variables = {
-  AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || '',
-  AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',
-  AWS_REGION: process.env.AWS_REGION || '',
-  AWS_S3_BUCKET: process.env.AWS_S3_BUCKET || '',
+  SUPABASE_URL: process.env.SUPABASE_URL || '',
+  SUPABASE_SERVICE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
 };
 
-export const AWS_FOLDERS = { BACKGROUNDS: 'backgrounds', LAYOUT_ASSETS: 'layout assets' };
+
