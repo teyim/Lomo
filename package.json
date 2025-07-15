@@ -10,10 +10,12 @@
     "dev": "turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "postinstall": "turbo run build"
   },
   "dependencies": {
-    "aws-sdk": "^2.1692.0"
+    "aws-sdk": "^2.1692.0",
+    "@repo/db": "*"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
