@@ -1,8 +1,8 @@
-import { Router } from "express";
-import { getLayoutsController } from "./controller";
+import { Router, type Router as ExpressRouter } from 'express';
+import { getLayoutsController } from './controller';
 
-const router = Router();
+const router: ExpressRouter = Router();
 
-router.get("/", getLayoutsController);
+router.get('/', getLayoutsController);
 
 export default router;

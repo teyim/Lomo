@@ -1,5 +1,5 @@
 // src/routes/assetCategoryRoutes.ts
-import { Router } from "express";
+import { Router, type Router as ExpressRouter } from 'express';
 import { validateData } from "../../middleware/validation";
 import {
   createAssetCategorySchema,
@@ -12,7 +12,7 @@ import {
   updateAssetCategoryController,
 } from "./Controller";
 
-const router = Router();
+const router: ExpressRouter = Router();
 
 router.post(
   "/",

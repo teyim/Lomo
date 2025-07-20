@@ -1,5 +1,5 @@
-import { LayoutElement } from ".prisma/client";
-import { Separator } from "@/components/ui/separator";
+import { LayoutElement } from '@repo/db';
+import { Separator } from '@/components/ui/separator';
 import { ThumbnailBackgroundData } from '@/types';
 import { FileImage, Type } from 'lucide-react';
 import React from 'react';
@@ -9,10 +9,7 @@ interface LayerPanelProps {
   layoutElements: LayoutElement[] | null;
 }
 
-export default function LayerPanel({
-  background,
-  layoutElements,
-}: LayerPanelProps) {
+export default function LayerPanel({ background, layoutElements }: LayerPanelProps) {
   // const baseLayerItemStyles =
   //   "flex items-center justify-between p-2 rounded cursor-pointer hover:bg-gray-100/20";
 

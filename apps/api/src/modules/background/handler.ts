@@ -1,13 +1,13 @@
-import { Router } from "express";
+import { Router, type Router as ExpressRouter } from 'express';
 import {
   addBackgroundController,
   deleteBackgroundController,
   getAllBackgroundsController,
   updateBackgroundController,
-} from "./controller";
+} from './controller';
 import upload from '../../utils/upload';
 
-const router = Router();
+const router: ExpressRouter = Router();
 
 // add background
 router.post('/', upload().single('background'), addBackgroundController);

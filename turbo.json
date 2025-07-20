@@ -9,9 +9,9 @@
       "cache": true
     },
     "start": {
-      "dependsOn": ["build"], // Ensures build runs first
+      "dependsOn": ["build"],
       "cache": false,
-      "persistent": true // Required for long-running processes
+      "persistent": true
     },
     "test": {
       "outputs": ["coverage/**"],

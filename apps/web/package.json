@@ -15,7 +15,7 @@
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
-    "@repo/ui": "*",
+    "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.66.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -29,12 +29,12 @@
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^5.0.3",
-    "@repo/db": "*"
+    "@repo/db": "workspace:*"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.1.1",
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@types/node": "^20.11.24",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
