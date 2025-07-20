@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type Router as ExpressRouter } from 'express';
 
 import upload from '../../utils/upload';
 import {
@@ -9,7 +9,7 @@ import {
   updateAssetController,
 } from './controller';
 
-const router = Router();
+const router: ExpressRouter = Router();
 
 // add background
 router.post('/', upload().single('asset'), addAssetController);
