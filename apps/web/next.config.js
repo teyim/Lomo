@@ -8,5 +8,4 @@ module.exports = {
     outputFileTracingRoot: path.join(__dirname, "../../"),
   },
   images: { domains: ["yberslmruhyqoangnstx.supabase.co"] },
-
 };
