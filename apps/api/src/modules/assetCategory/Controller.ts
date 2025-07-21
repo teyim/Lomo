@@ -7,18 +7,25 @@ import {
   deleteAssetCategoryService,
   getAssetCategoriesService,
   updateAssetCategoryService,
-} from "./service";
+} from './service';
+
 export const addAssetCategoryController = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const { name } = req.body;
-
+    if (!name) {
+      throw new Error('Category name is required');
+    }
     const assetCategory = await addAssetCategoryService(name);
 
-    res.status(HttpStatusCode.Created).json({ success: true, assetCategory });
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: 'asset category created successfully',
+      assetCategory,
+    });
   } catch (error) {
     return next(error);
   }
@@ -27,7 +34,7 @@ export const addAssetCategoryController = async (
 export const getAssetCategoriesController = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const assetCategories = await getAssetCategoriesService();
@@ -40,11 +47,18 @@ export const getAssetCategoriesController = async (
 export const updateAssetCategoryController = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const { id } = req.params;
     const { name } = req.body;
+
+    if (!id) {
+      throw new Error('Category id is required');
+    }
+    if (!name) {
+      throw new Error('Category name is required');
+    }
 
     const updatedCategory = await updateAssetCategoryService(id, name);
     res.status(HttpStatusCode.OK).json({ success: true, updatedCategory });
@@ -56,13 +70,17 @@ export const updateAssetCategoryController = async (
 export const deleteAssetCategoryController = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const { id } = req.params;
-
-    const deletedCategory = await deleteAssetCategoryService(id);
-    res.status(HttpStatusCode.OK).json({ success: true, deletedCategory });
+    if (!id) {
+      throw new Error('Category id is required');
+    }
+    await deleteAssetCategoryService(id);
+    res
+      .status(HttpStatusCode.OK)
+      .json({ success: true, message: 'asset category deleted successfully' });
   } catch (error) {
     return next(error);
   }

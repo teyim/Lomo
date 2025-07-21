@@ -5,16 +5,9 @@
     "paths": {
       "@/*": ["./src/*"],
       "public/*": ["./public/*"]
-    }
+    },
+    "jsx": "preserve"
   },
-  "include": [
-    "next-env.d.ts",
-    "next.config.js",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "./tailwind.config.js"
-  ],
-
+  "include": ["next-env.d.ts", "next.config.js", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "./tailwind.config.js"],
   "exclude": ["node_modules"]
 }
