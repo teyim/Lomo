@@ -1,5 +1,5 @@
 import { DatabaseActions } from '../types';
-import { PrismaClient } from '@repo/db';
+import { PrismaClient } from '@prisma/client';
 
 import dotenv from 'dotenv';
 

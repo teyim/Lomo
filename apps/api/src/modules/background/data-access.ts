@@ -3,7 +3,7 @@ import { getDataAccessErrorMessage } from '../../utils/errors';
 import { ENV_variables, HttpStatusCode } from '../../constants';
 import { deleteSupabaseObject } from '../../utils';
 import { ErrorWithStatus } from '../../types/error';
-import { prisma } from '@repo/db';
+import { prisma } from '../../constants';
 
 export const addBackground = async (
   name: string,
