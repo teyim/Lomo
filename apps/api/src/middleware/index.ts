@@ -1,22 +1,18 @@
-import { PrismaClient } from "@repo/db";
-import { NextFunction, Request, Response } from "express";
-import { HttpStatusCode } from "../constants";
-
-export const prisma = new PrismaClient();
+import { NextFunction, Request, Response } from 'express';
+import { HttpStatusCode } from '../constants';
+import { prisma } from '../constants';
 
 export const checkBackgroundExists = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     console.log(req.body);
     const { name } = req.body;
 
     if (!name) {
-      res
-        .status(HttpStatusCode.BadRequest)
-        .json({ success: false, message: "Name is required" });
+      res.status(HttpStatusCode.BadRequest).json({ success: false, message: 'Name is required' });
       return;
     }
 
@@ -35,7 +31,7 @@ export const checkBackgroundExists = async (
     // Proceed to the next middleware if no background exists
     next();
   } catch (error: any) {
-    console.error("Error checking background existence:", error.message);
+    console.error('Error checking background existence:', error.message);
     next(error); // Pass the error to the global error handler
   }
 };

@@ -1,5 +1,5 @@
-import { prisma } from "@repo/db";
-import { getDataAccessErrorMessage } from "../../utils/errors";
+import { prisma } from '../../constants';
+import { getDataAccessErrorMessage } from '../../utils/errors';
 
 export const addAssetCategory = async (name: string) => {
   try {
@@ -10,8 +10,8 @@ export const addAssetCategory = async (name: string) => {
     });
     return assetCategory;
   } catch (error) {
-    console.error(getDataAccessErrorMessage("Asset Category", "delete"), error);
-    throw new Error(getDataAccessErrorMessage("Asset Category", "delete"));
+    console.error(getDataAccessErrorMessage('Asset Category', 'delete'), error);
+    throw new Error(getDataAccessErrorMessage('Asset Category', 'delete'));
   }
 };
 
@@ -20,8 +20,8 @@ export const fetchAllAssetCategories = async () => {
     const assetCategories = await prisma.assetCategory.findMany();
     return assetCategories;
   } catch (error) {
-    console.error(getDataAccessErrorMessage("asset categories", "get"), error);
-    throw new Error(getDataAccessErrorMessage("asset categories", "get"));
+    console.error(getDataAccessErrorMessage('asset categories', 'get'), error);
+    throw new Error(getDataAccessErrorMessage('asset categories', 'get'));
   }
 };
 
@@ -33,8 +33,8 @@ export const updateAssetCategory = async (id: string, newName: string) => {
     });
     return updatedCategory;
   } catch (error) {
-    console.error(getDataAccessErrorMessage("asset category", "update"), error);
-    throw new Error(getDataAccessErrorMessage("asset category", "update"));
+    console.error(getDataAccessErrorMessage('asset category', 'update'), error);
+    throw new Error(getDataAccessErrorMessage('asset category', 'update'));
   }
 };
 
@@ -45,7 +45,7 @@ export const deleteAssetCategory = async (id: string) => {
     });
     return deletedCategory;
   } catch (error) {
-    console.error(getDataAccessErrorMessage("asset category", "delete"), error);
-    throw new Error(getDataAccessErrorMessage("asset category", "delete"));
+    console.error(getDataAccessErrorMessage('asset category', 'delete'), error);
+    throw new Error(getDataAccessErrorMessage('asset category', 'delete'));
   }
 };
