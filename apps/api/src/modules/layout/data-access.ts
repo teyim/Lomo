@@ -1,5 +1,5 @@
-import { PrismaClient, Layout } from "@prisma/client";
-import { getDataAccessErrorMessage } from "../../utils/errors";
+import { PrismaClient } from '@prisma/client';
+import { getDataAccessErrorMessage } from '../../utils/errors';
 const prisma = new PrismaClient();
 
 export const fetchAllLayouts = async () => {
@@ -9,7 +9,7 @@ export const fetchAllLayouts = async () => {
     });
     return layouts;
   } catch (error) {
-    console.error(getDataAccessErrorMessage("layouts", "get"), error);
-    throw new Error(getDataAccessErrorMessage("layouts", "get"));
+    console.error(getDataAccessErrorMessage('layouts', 'get'), error);
+    throw new Error(getDataAccessErrorMessage('layouts', 'get'));
   }
 };

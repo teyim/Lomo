@@ -1,7 +1,7 @@
 {
-  "extends": "@repo/typescript-config/base.json",
-  "compilerOptions": { "lib": ["ES2015"], "outDir": "./dist", "rootDir": "./src" },
-  "exclude": ["node_modules", "src/__tests__", "**/*.test.ts", "**/*.test.tsx"],
-  "include": ["src", "utils", "types"],
-  "references": [{ "path": "../../packages/database" }, { "path": "../../packages/logger" }]
+  "extends": "@repo/typescript-config/express.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*.ts", "eslint.config.mjs"]
 }

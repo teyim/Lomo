@@ -1,41 +1,36 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
   "tasks": {
+    "topo": {
+      "dependsOn": ["^topo"]
+    },
     "build": {
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"],
-      "dependsOn": ["^build", "^db:generate"],
-      "env": ["API_HOST", "AWS_ACCESS_KEY_ID", "AWS_REGION", "AWS_BUCKET", "AWS_SECRET_ACCESS_KEY", "DATABASE_URL"],
-      "cache": true
-    },
-    "start": {
-      "dependsOn": ["build"],
-      "cache": false,
-      "persistent": true
-    },
-    "test": {
-      "outputs": ["coverage/**"],
-      "dependsOn": []
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "lint": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^topo"]
     },
+    "format": {
+      "dependsOn": ["^topo"]
+    },
+    "lint:fix": {
+      "dependsOn": ["^topo"]
+    },
+    "format:fix": {
+      "dependsOn": ["^topo"]
+    },
+    "check-types": {},
     "dev": {
-      "dependsOn": ["^db:generate"],
       "cache": false,
       "persistent": true
+    },
+    "add-shadcn-component": {
+      "dependsOn": ["^topo"]
     },
     "clean": {
       "cache": false
-    },
-    "db:generate": {
-      "cache": false
-    },
-    "db:push": {
-      "cache": false
-    },
-    "db:seed": {
-      "cache": true
     }
   }
 }

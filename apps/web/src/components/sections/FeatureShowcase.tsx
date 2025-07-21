@@ -101,10 +101,10 @@ export default function FeatureShowcase() {
               <div className="bg-background rounded-2xl p-6 shadow-lg">
                 <div className="mb-6">
                   <div className="text-sm text-muted-foreground mb-1">Total Bill</div>
-                  <div className="text-3xl font-bold">{features[selectedFeature].chart.total}</div>
+                  <div className="text-3xl font-bold">{features[selectedFeature]?.chart.total}</div>
                 </div>
                 <div className="h-[200px] flex items-end gap-2">
-                  {features[selectedFeature].chart?.data?.map((value, i) => (
+                  {features[selectedFeature]?.chart?.data?.map((value, i) => (
                     <motion.div
                       key={i}
                       className="flex-1 bg-primary/80"

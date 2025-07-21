@@ -13,7 +13,7 @@ function AssetsCards({ categoryId }: AssetCardProps) {
     queryKey: [QUERY_KEYS.Assets_By_Category],
     queryFn: () => getAssetsByCategory(categoryId),
   });
-  console.log(data?.assets[0].imgUrl);
+
   const renderCurrentComponentState = () => {
     if (isPending) {
       return (

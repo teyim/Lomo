@@ -2,6 +2,7 @@
   "name": "api",
   "version": "0.0.0",
   "scripts": {
+    "prebuild": "cd ../../packages/database && npm run build && cd ../../packages/logger && npm run build",
     "build": "tsc",
     "clean": "rm -rf dist",
     "dev": "nodemon --exec \"node -r esbuild-register ./src/index.ts\" -e .ts",
